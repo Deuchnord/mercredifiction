@@ -7,11 +7,17 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * An author is a user of Mastodon who has subscribed to the website in order to make their statuses appear on the website.
  * @ORM\Entity(repositoryClass="App\Repository\AuthorRepository")
  */
-class Author
-{
+class Author {
+    public const STATE_NEW = 0;
+    public const STATE_IMPORTING_STATUSES = 1;
+    public const STATE_OK = 2;
+
     /**
+     * An unique identifier to distinguish each author from another. This identifier is proper to the website
+     * and does not reflect the identifier on their instance.
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -19,13 +25,13 @@ class Author
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Instance", inversedBy="authors")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="integer")
      */
-    private $instance;
+    private $idMastodon;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * The author username. It has usually the form "username@instance.tld", for instance "Gargron@mastodon.social".
+     * @ORM\Column(type="string", length=255)
      */
     private $username;
 
@@ -44,26 +50,20 @@ class Author
      */
     private $statuses;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $state;
+
     public function __construct()
     {
         $this->statuses = new ArrayCollection();
+        $this->state = self::STATE_NEW;
     }
 
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getInstance(): ?Instance
-    {
-        return $this->instance;
-    }
-
-    public function setInstance(?Instance $instance): self
-    {
-        $this->instance = $instance;
-
-        return $this;
     }
 
     public function getUsername(): ?string
@@ -129,6 +129,30 @@ class Author
                 $status->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIdMastodon(): ?int
+    {
+        return $this->idMastodon;
+    }
+
+    public function setIdMastodon(int $idMastodon): self
+    {
+        $this->idMastodon = $idMastodon;
+
+        return $this;
+    }
+
+    public function getState(): ?int
+    {
+        return $this->state;
+    }
+
+    public function setState(int $state): self
+    {
+        $this->state = $state;
 
         return $this;
     }

@@ -19,6 +19,30 @@ class StatusRepository extends ServiceEntityRepository
         parent::__construct($registry, Status::class);
     }
 
+    /**
+     * @param $url
+     * @return Status|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByUrl($url): ?Status
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.url = :url')
+            ->setParameter('url', $url)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @return int|null
+     */
+    public function findMaxIdMastodon(): int {
+        return $this->createQueryBuilder('s')
+            ->select('s, MAX(s.idMastodon) as maxId')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Status[] Returns an array of Status objects
 //     */

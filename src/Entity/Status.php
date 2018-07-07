@@ -17,6 +17,11 @@ class Status
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $idMastodon;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Author", inversedBy="statuses")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -28,19 +33,19 @@ class Status
     private $url;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $favorited;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $reblogged;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $blacklisted;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $content;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date;
 
     public function getId()
     {
@@ -71,30 +76,6 @@ class Status
         return $this;
     }
 
-    public function getFavorited(): ?int
-    {
-        return $this->favorited;
-    }
-
-    public function setFavorited(int $favorited): self
-    {
-        $this->favorited = $favorited;
-
-        return $this;
-    }
-
-    public function getReblogged(): ?int
-    {
-        return $this->reblogged;
-    }
-
-    public function setReblogged(int $reblogged): self
-    {
-        $this->reblogged = $reblogged;
-
-        return $this;
-    }
-
     public function isBlacklisted(): ?bool
     {
         return $this->blacklisted;
@@ -103,6 +84,42 @@ class Status
     public function setBlacklisted(bool $blacklisted): self
     {
         $this->blacklisted = $blacklisted;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getIdMastodon(): ?int
+    {
+        return $this->idMastodon;
+    }
+
+    public function setIdMastodon(int $idMastodon): self
+    {
+        $this->idMastodon = $idMastodon;
 
         return $this;
     }

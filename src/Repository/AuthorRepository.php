@@ -19,6 +19,31 @@ class AuthorRepository extends ServiceEntityRepository
         parent::__construct($registry, Author::class);
     }
 
+    /**
+     * @param $username
+     * @return Author|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByUsername(string $username): ?Author {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param int $state
+     * @return Author[]
+     */
+    public function findByState(int $state): array {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.state = :state')
+            ->setParameter('state', $state)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Author[] Returns an array of Author objects
 //     */
