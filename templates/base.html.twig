@@ -2,11 +2,25 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}#MercrediFiction{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset("mercredifiction.css") }}" />
     </head>
     <body>
+        <header>
+            <a class="logo" href="{{ path('homepage') }}">
+                <img src="{{ asset("mercredifiction.png") }}" alt="MercrediFiction" />
+            </a>
+            <div class="links">
+                <a href="{{ path('authors') }}"><i class="icofont icofont-people"></i> Liste des auteurs</a>
+                <a href="{{ path('subscribe') }}"><i class="icofont icofont-ui-user"></i> Inscription</a>
+            </div>
+        </header>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
+        <footer>
+            Créé avec le ❤️ (et les 🤲) ️par Jérôme Deuchnord<br />
+            <a href="{{ path('about') }}">À propos</a> –
+            <a href="https://github.com/Deuchnord/MercrediFiction" target="_blank">Code source</a>
+        </footer>
     </body>
 </html>

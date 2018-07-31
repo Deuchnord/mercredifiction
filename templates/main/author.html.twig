@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ author.displayName }} (@{{ author.username }}) - #MercrediFiction{% endblock %}
+
+{% block body %}
+
+    <div class="profile">
+        <section class="author">
+            <img class="avatar" src="{{ author.avatar }}" alt="{{ author.displayName }}'s avatar" />
+            <h1 class="display-name">
+                {{ author.displayName }}
+                <a class="username" href="{{ author.profileUrl }}" target="_blank">{{ author.username }}</a>
+            </h1>
+        </section>
+        {% if(author.state < 2) %}
+            <p class="warning profile-incomplete">Le profil de {{ author.displayName }} est en cours de construction, ses
+                fictions peuvent mettre du temps à apparaître.</p>
+        {% endif %}
+        <section class="toots">
+            {% for status in author.statuses %}
+                {% if not status.blacklisted %}
+                    <div class="toot">
+                        <div class="content">
+                            <p>{{ status.content | nl2br }}</p>
+                        </div>
+                        <p class="attribution"><a href="{{ status.url }}" target="_blank">{{ status.date | localizeddate('long', 'short') }}</a></p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </section>
+    </div>
+
+{% endblock %}

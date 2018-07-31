@@ -1,0 +1,200 @@
+@charset "UTF-8";
+@import url(reset.css);
+@import url(icofont/css/icofont.css);
+@font-face {
+  font-family: "Montserrat";
+  font-weight: normal;
+  src: url("/fonts/Montserrat/Montserrat-Regular.ttf"); }
+@font-face {
+  font-family: "Montserrat";
+  font-weight: bold;
+  src: url("/fonts/Montserrat/Montserrat-Bold.ttf"); }
+@font-face {
+  font-family: "Montserra";
+  font-weight: lighter;
+  src: url("/fonts/Montserrat/Montserrat-Light"); }
+@font-face {
+  font-family: "Libre Baskerville";
+  font-weight: normal;
+  src: url("/fonts/Libre_Baskerville/LibreBaskerville-Regular.ttf"); }
+html {
+  position: relative;
+  min-height: 100%; }
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  margin-bottom: 50px;
+  color: #555555; }
+  body .toots {
+    width: 900px;
+    margin: auto; }
+    body .toots > .toot {
+      padding: 20px 0; }
+      body .toots > .toot > .content {
+        font-family: "Libre Baskerville", serif;
+        text-align: justify;
+        font-size: 16px; }
+      body .toots > .toot > .attribution {
+        text-align: right;
+        font-size: 16px;
+        color: #aaaaaa; }
+        body .toots > .toot > .attribution > a {
+          color: #aaaaaa; }
+        body .toots > .toot > .attribution:before {
+          content: "– "; }
+  body > header {
+    background: white;
+    margin: 0;
+    padding: 2px; }
+    body > header > .logo {
+      display: inline-block;
+      text-decoration: none;
+      vertical-align: middle; }
+    body > header > .links {
+      position: absolute;
+      right: 50px;
+      top: 35px; }
+      body > header > .links > a {
+        padding: 0 10px;
+        text-decoration: none;
+        transition: 500ms;
+        border-bottom: 1px solid white; }
+        body > header > .links > a:hover {
+          border-bottom: 1px solid #aaaaaa; }
+  body h1, body h2, body h3, body h4, body h5, body h6 {
+    vertical-align: middle;
+    color: #308AD4;
+    font-weight: bold;
+    margin: 15px 0; }
+  body h1 {
+    font-size: 50px; }
+  body h2 {
+    font-size: 30px; }
+  body p, body li {
+    line-height: 25px;
+    margin: 0 20px; }
+  body ul {
+    margin: 10px 50px; }
+    body ul > li {
+      list-style-type: square; }
+  body a {
+    color: #3088d4; }
+  body > footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: #aaaaaa;
+    font-size: 0.7em; }
+    body > footer > a {
+      color: #aaaaaa; }
+  body > .static-content {
+    width: 1000px;
+    margin: 20px auto; }
+    body > .static-content p {
+      margin: 15px 0; }
+    body > .static-content > .center {
+      text-align: center; }
+    body > .static-content > .right {
+      text-align: right; }
+    body > .static-content > .small {
+      font-size: 0.4em; }
+    body > .static-content > .big {
+      font-size: 2em;
+      line-height: 1.2em;
+      margin-top: 20px; }
+    body > .static-content em {
+      color: #308AD4;
+      font-weight: bold; }
+    body > .static-content > .authors-list {
+      text-align: center; }
+      body > .static-content > .authors-list > .author {
+        list-style-type: none;
+        display: inline-block;
+        margin: 0; }
+        body > .static-content > .authors-list > .author > a {
+          display: block;
+          text-align: left;
+          height: 70px;
+          width: 300px;
+          text-decoration: none;
+          background: #eeeeee;
+          padding: 10px 30px;
+          margin: 10px;
+          box-shadow: 0 0 0 #aaaaaa;
+          transition: 500ms box-shadow, 500ms transform; }
+          body > .static-content > .authors-list > .author > a:hover {
+            box-shadow: 0 0 20px #aaaaaa;
+            transform: scale(1.05); }
+          body > .static-content > .authors-list > .author > a > img {
+            max-height: 64px;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: top; }
+          body > .static-content > .authors-list > .author > a > .detail {
+            display: inline-block;
+            color: #555555; }
+            body > .static-content > .authors-list > .author > a > .detail > .name {
+              font-weight: bold;
+              display: block;
+              width: 220px;
+              margin-top: 5px;
+              margin-bottom: 0px;
+              padding: 0;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; }
+            body > .static-content > .authors-list > .author > a > .detail > .remark {
+              font-size: 0.7em;
+              color: #aaaaaa;
+              font-weight: lighter; }
+  body > .welcome {
+    background: #308AD4;
+    padding: 50px;
+    text-align: center;
+    font-size: 30px;
+    color: white; }
+    body > .welcome > p {
+      margin: 0; }
+      body > .welcome > p.moreinfo {
+        margin-top: 20px; }
+        body > .welcome > p.moreinfo > a {
+          font-size: 20px;
+          color: white; }
+  body > .profile {
+    width: 100%; }
+    body > .profile > .author {
+      background: #308AD4;
+      padding: 50px 25%; }
+      body > .profile > .author > .avatar {
+        border-radius: 50%;
+        transition: 250ms;
+        height: 200px;
+        vertical-align: middle; }
+        body > .profile > .author > .avatar:hover {
+          border-radius: 25%; }
+      body > .profile > .author > .display-name {
+        display: inline-block;
+        margin-left: 15px;
+        vertical-align: middle;
+        font-weight: bold;
+        font-size: 40px;
+        color: white;
+        text-overflow: ellipsis;
+        max-width: 499px;
+        overflow: hidden; }
+        body > .profile > .author > .display-name > .username {
+          display: block;
+          font-size: 20px;
+          color: white;
+          margin-left: 20px;
+          margin-top: 20px; }
+    body > .profile > .warning.profile-incomplete {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #aaaaaa;
+      text-align: center;
+      margin: 50px -50px; }
+
+/*# sourceMappingURL=mercredifiction.css.map */

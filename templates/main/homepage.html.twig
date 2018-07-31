@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="welcome">
+        <p>Bienvenue&nbsp;!</p>
+        <p>Ici, on chouchoute vos #mercredifictions !</p>
+        <p class="moreinfo"><a href="{{ path('about') }}">Plus d'infos</a></p>
+    </section>
+    <section class="toots">
+        {% for toot in toots %}
+            <div class="toot">
+                <div class="content">
+                    <p>{{ toot.content | nl2br }}</p>
+                </div>
+                <p class="attribution"><a href="{{ path('author-profile', {username: toot.author.username}) }}">{{ toot.author.displayName }}</a>, le <a href="{{ toot.url }}">{{ toot.date | localizeddate('long', 'short') }}</a></p>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

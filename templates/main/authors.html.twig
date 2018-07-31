@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste des auteurs{% endblock %}
+
+{% block body %}
+    <section class="static-content">
+        <h1>Liste des auteurs</h1>
+        <ul class="authors-list">
+            {% for author in authors %}
+                <li class="author">
+                    <a href="{{ path('author-profile', {username: author.username}) }}" title="{{ author.displayName }}">
+                        <img src="{{ author.avatar }}" alt="{{ author.displayName }}" class="avatar" />
+                        <span class="detail">
+                            <strong class="name">{{ author.displayName }}</strong>
+                            <small class="remark">
+                                {% if author.state < 2 %}
+                                    Profil en cours de création
+                                {% elseif author.statuses.count > 0 %}
+                                    {{ author.statuses.count }} fiction{% if author.statuses.count > 1 %}s{% endif %}
+                                {% else %}
+                                    Aucune fiction
+                                {% endif %}
+                            </small>
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock %}
+

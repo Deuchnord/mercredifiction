@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block title %}Manuel d'utilisation du bot{% endblock %}
+
+{% block body %}
+    <section class="static-content">
+        <h1>Manuel d'utilisation du bot</h1>
+        <p>En tant qu'auteur inscrit•e sur le site, vous avez accès à un certain nombre de fonctionnalités permettant de gérer votre
+        profil et vos fictions. Afin d'éviter de gérer des identifiants-mots de passe et pour éviter de demander des accès à votre profil
+        Mastodon (ce qui pourrait provoquer des soucis de confidentialité), la plupart de vos interactions avec le site se fait
+        par le biais d'un bot. La plupart des commandes nécessitent une inscription, sauf si le contraire est précisé.</p>
+        <p>Pour l'utiliser, il vous suffit d'envoyer une des commandes disponibles ci-dessous à <a href="{{ bot.profileUrl }}" target="_blank">@{{ bot.username }}</a>.
+        Le bot vous répondra en message direct.</p>
+        <p>NB&nbsp;: les commandes ne sont pas sensibles à la casse.</p>
+
+        <div class="bot-commands">
+            <div class="command">
+                <h2>Inscris-moi</h2>
+                <div class="description">
+                    <p>Permet de créer une page de profil sur le site et d'y importer ses fictions. Afin de faciliter
+                        le suivi de vos fictions, le bot vous suivra sur Mastodon.</p>
+                    <p>Voir <a href="{{ path('subscribe') }}">la page d'inscription</a> pour plus d'informations.</p>
+                </div>
+            </div>
+            <div class="command">
+                <h2>Désinscris-moi</h2>
+                <div class="description">
+                    <p>Permet de supprimer l'intégralité des informations vous concernant.</p>
+                    <p>Une fois le traitement de la demande effectué, votre page de profil ainsi que vos fictions ne seront
+                        plus disponibles sur le site.</p>
+                </div>
+            </div>
+            <div class="command">
+                <h2>Masque &lt;lien du pouet&gt;</h2>
+                <div class="description">
+                    <p>Permet de masquer le pouet dont le lien est indiqué en paramètre.</p>
+                    <p>Notez que vous pouvez retrouver le lien du pouet d'origine simplement en cliquant sur la date
+                        en-dessous de celui-ci.</p>
+                </div>
+                <div class="example">
+                    <h3>Exemple</h3>
+                    <blockquote>@{{ bot.username }} masque https://hostux.social/@Deuchnord/100197105379209153</blockquote>
+                </div>
+            </div>
+            <div class="command">
+                <h2>Mes données personnelles</h2>
+                <p>Lancer cette commande vous permet de faire valoir votre droit d'accès aux données qui vous concernent.
+                    Un fichier téléchargeable vous sera transmis avec l'intégralité de vos informations personnelles.</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}

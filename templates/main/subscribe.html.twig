@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block title %}S'inscrire{% endblock %}
+
+{% block body %}
+    <section class="static-content">
+        <h1>Comment s'inscrire&nbsp;?</h1>
+        <p>Vous voulez voir vos #MercrediFictions apparaître sur le site&nbsp;? Aucun problème, il vous suffit pour cela
+            de vous inscrire&nbsp;!</p>
+        <p>Afin de s'assurer que vous êtes bien la personne que vous prétendez être, l'inscription se fait en envoyant
+            un simple message sur Mastodon&nbsp;:</p>
+        <p class="center big">Envoyez <em>inscris-moi</em> à
+            <a href="{{ bot.profileUrl }}" target="_blank">@{{ bot.username }}</a></p>
+        <p class="right small"><del>0,35&nbsp;€/caractère + coûts hors forfait</del></p>
+
+        <h2>Et ensuite&nbsp;?</h2>
+
+        <p>Vous recevrez un message dès que votre page de profil sera créée et vos #MercrediFictions seront rapatriés
+            et le bot ajoutera votre compte à ses abonnements afin de faciliter le suivi de vos pouets.
+            Cette opération peut prendre du temps, soyez patient•e 🙂.</p>
+        <p>L'abonnement est nécessaire afin de palier les problèmes de mise à jour de flux entre les instances.</p>
+        <p>Une fois votre inscription prise en compte, vous aurez accès à <a href="{{ path('bot-manual') }}">d'autres
+            commandes</a> qui vous permettront de gérer votre profil (masquage de pouets, suppression du profil, etc.)</p>
+
+        <h2>Mon profil n'a toujours pas été créé ou est toujours vide</h2>
+
+        <p>Une fois que vous avez envoyé votre demande de création de profil, il peut se passer un délai de 5 minutes
+            avant que votre demande soit prise en compte, puis vos pouets seront rappatriés, ce qui peut prendre un moment
+            en fonction du nombre de messages que vous avez publiés sur Mastodon depuis la création de votre compte.</p>
+        <p>Cependant, si vous trouvez que la création de votre profil s'éternise, n'hésitez pas à ouvrir un ticket sur le
+            dépôt Git (voir le lien «&nbsp;Code source&nbsp;» en bas de page) ou à contacter l'administrateur,
+            <a href="{{ admin.profileUrl }}" target="_blank">{{ admin.displayName }}</a>, sur Mastodon.</p>
+    </section>
+{% endblock %}

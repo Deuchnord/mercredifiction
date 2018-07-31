@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos{% endblock %}
+{% block pageTitle %}{% endblock %}
+
+{% block body %}
+
+    <section class="static-content">
+        <h1>À propos de ce site</h1>
+
+        <p>#MercrediFiction est, comme le sous-entend le nom, un hashtag dont le but est de permettre à tous de raconter
+            une histoire. Créé en 2017 avec l'arrivée en masse des francophones sur le réseau social
+            <a href="https://joinmastodon.org" target="_blank">Mastodon</a>, le hashtag est aujourd'hui toujours actif
+            et est devenu depuis une véritable tradition.</p>
+        <p>Des milliers de messages étant publiés sur Mastodon chaque jour, les anciennes fictions des membres deviennent
+            difficiles à retrouver avec le temps. Le but de ce site est donc de permettre aux auteurs qui le souhaitent de donner
+            de la visibilité à leurs fictions en les stockant et en les présentant de façon conviviale.</p>
+
+        <h2><i class="icofont icofont-paper"></i> Droit d'auteur et mentions légales</h2>
+
+        <p>Le présent site ne revendique aucunement la paternité des fictions qui restent donc la propriété des auteurs.
+            Le lien vers le pouet original est systématiquement mis à disposition sous chaque fiction et est accessible
+            simplement en cliquant sur la date de celle-ci. Les auteurs disposent de plus d'un contrôle total sur
+            les fictions de leur crû qu'ils souhaitent voir affichés ou non sur le site.</p>
+        <p>Compte tenu de la nature du présent site, les auteurs dont le compte Mastodon est verrouillé acceptent de voir leurs
+            fictions mises à disposition publiquement.</p>
+        <p>Conformément aux lois en vigueur, tout message pénalement sanctionnable
+            (messages à caractère discriminatoire,  incitation à la violence, etc.) sera retiré. Son auteur pourra de
+            plus être banni si les circonstances le demandent. Ces actions de modération sont réalisées par l'administrateur de ce site,
+            <a href="{{ admin.profileUrl }}" target="_blank">{{ admin.displayName }}</a>, et sont toujours précédées par
+            une notification sur Mastodon en message privé.</p>
+
+        <h2><i class="icofont icofont-database"></i> Données personnelles</h2>
+
+        <p>Ce site utilise le logiciel <a href="https://matomo.org/" target="_blank">Matomo</a> à des fins statistiques
+            (nombre de visites journalières, localisation des visiteurs, langue du navigateur, etc.).
+            Matomo est un logiciel libre et respecte l'instruction «&nbsp;Ne pas tracer&nbsp;» (<span class="italic">Do Not Track</span>)
+            envoyée par votre navigateur.</p>
+        <p>Si vous êtes inscrit•e, les informations suivantes vous concernant sont stockées&nbsp;:</p>
+        <ul>
+            <li>votre nom d'utilisateur (sous la forme username@instance.tld)&nbsp;;</li>
+            <li>votre pseudonyme Mastodon&nbsp;;</li>
+            <li>votre avatar (stocké par l'instance Mastodon du bot)&nbsp;;</li>
+            <li>l'ensemble de vos messages possédants le hashtag #MercrediFiction sur Mastodon (y compris les messages masqués).</li>
+        </ul>
+        <p>Conformément au Réglement général européen pour la protection des données personnelles (RGPD), vous disposez d'un droit
+            d'accès aux données personnelles qui vous concernent. Pour exercer ce droit, que vous résidiez au sein de
+            l'Union européenne ou non, envoyez le message suivant sur Mastodon à
+            <a href="{{ bot.profileUrl }}" target="_blank">@{{ bot.username }}</a>&nbsp;: <em>mes données personnelles</em>.</p>
+        <p>Si vous choisissez de vous désinscrire, la totalité de vos données personnelles sont supprimées.</p>
+
+        <h2><i class="icofont icofont-license"></i> Licences</h2>
+        <p>Ce site est réalisé par <a href="https://deuchnord.fr">Jérôme Deuchnord</a> et publié sous la licence
+            <a href="http://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU Affero General Public License 3.0</a>.
+            Il utilise les ressources suivantes&nbsp;:</p>
+        <ul>
+            <li><a href="https://php.net" target="_blank">PHP</a> est un logiciel publié sous la licence <a href="http://www.php.net/license/3_01.txt" target="_blank">PHP 3.01</a></li>
+            <li>Symfony 4 est un cadre de travail pour PHP réalisé par <a href="https://sensiolabs.com/fr" target="_blank">SensioLabs</a> et publié sous la licence <a href="https://opensource.org/licenses/mit-license.php" target="_blank">MIT</a></li>
+            <li><a href="https://joinmastodon.org" target="_blank">Mastodon</a> est un logiciel créé par <a href="https://mastodon.social/@Gargron" target="_blank">Eugen</a> et publié sous la licence <a href="http://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU Affero General Public License 3.0</a>.</li>
+            <li>Les icônes proviennent de <a href="http://icofont.com" target="_blank">IcoFont</a> et sont publiées sous <a href="http://icofont.com/license/" target="_blank">licence open source</a>.</li>
+        </ul>
+    </section>
+
+{% endblock %}
