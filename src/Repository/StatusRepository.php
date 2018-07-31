@@ -20,6 +20,16 @@ class StatusRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Status[]
+     */
+    public function findAllNotBlacklisted() {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.blacklisted = false')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param $url
      * @return Status|null
      * @throws \Doctrine\ORM\NonUniqueResultException

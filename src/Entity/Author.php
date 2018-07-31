@@ -156,4 +156,10 @@ class Author {
 
         return $this;
     }
+
+    public function getProfileUrl(): string {
+        $param = preg_split("#@#", $this->getUsername());
+
+        return 'https://' . $param[1] . '/@' . $param[0];
+    }
 }
