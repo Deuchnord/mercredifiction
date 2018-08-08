@@ -50,11 +50,14 @@ body {
     body > header > .logo {
       display: inline-block;
       text-decoration: none;
-      vertical-align: middle; }
+      vertical-align: middle;
+      padding: 10px 20px; }
+      body > header > .logo > img {
+        height: 128px; }
     body > header > .links {
       position: absolute;
       right: 50px;
-      top: 35px; }
+      top: 60px; }
       body > header > .links > a {
         padding: 0 10px;
         text-decoration: none;
