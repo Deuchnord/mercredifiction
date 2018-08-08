@@ -81,7 +81,7 @@ class BotCommand extends ContainerAwareCommand {
         } catch (NonUniqueResultException $e) {
             try {
                 CommandUtils::writeError($io, "Error while checking if " . $author->getUsername() . " is already subscribed", $e);
-                MastodonUtils::sendStatus( "Woops, désolé, j'ai bugué !\n\nPoke @" . getenv('ADMIN') . ", À L'AAAAAAIIIIIIIIDE ! 😭", $mention);
+                MastodonUtils::sendStatus( "Woops, désolé, j'ai bugué !\n\n@" . getenv('ADMIN') . ", À L'AAAAAAIIIIIIIIDE ! 😭", $mention);
             } catch (\Exception $e) {
                 CommandUtils::writeError($io, "Error while sending an error message", $e);
             }
@@ -116,7 +116,13 @@ class BotCommand extends ContainerAwareCommand {
                     break;
                 }
 
-                if (preg_match('#inscri[ts][ -]moi#i', $mention->getContent())) {
+                if(preg_match("#d[ée]sinscri[ts][ -]moi#i", $mention->getContent()) ||
+                    preg_match("#supprimes? mon compte#i", $mention->getContent())) {
+                    /** Delete account command */
+                    $this->deleteProfile($io, $mention);
+                }
+                elseif (preg_match('#inscri[ts][ -]moi#i', $mention->getContent())) {
+                    /** Create account command */
                     $this->subscribe($io, $mention);
                 } else {
                     $this->sendManual($mention, $io);
@@ -154,6 +160,38 @@ class BotCommand extends ContainerAwareCommand {
 
         }
 
+    }
+
+    private function deleteProfile(SymfonyStyle $io, Status $mention) {
+        $io->write("Deleting " . $mention->getAuthor()->getDisplayName() . "'s profile...");
+
+        $entityManager = self::getEntityManager();
+
+        try {
+            $author = $entityManager->getRepository(Author::class)->findOneByUsername($mention->getAuthor()->getUsername());
+
+            if($author == null) {
+                $io->writeln("Not subscribed, ignoring.");
+                MastodonUtils::sendStatus("Vous n'avez pas de profil sur le site 🤔", $mention);
+                return;
+            }
+
+            $entityManager->remove($author);
+            $entityManager->flush();
+            $io->writeln(" Done!");
+
+            // TODO: add Adibou's GIF, with a focus on 300,130
+            MastodonUtils::sendStatus("J'ai bien supprimé ton profil. À bientôt ! 👋", $mention, MastodonUtils::VISIBILITY_DIRECT);
+        } catch (NonUniqueResultException $e) {
+            CommandUtils::writeError($io, "Could not delete " . $mention->getAuthor()->getUsername() . "'s profile: more than one authors found!'");
+            try {
+                MastodonUtils::sendStatus("Désolé, une erreur s'est produite, je n'ai pas pu supprimer ton profil 😭\nPssst, @" . getenv('ADMIN') . ", j'ai besoin de ton aide !", $mention);
+            } catch (\Exception $e) {
+                CommandUtils::writeError($io, "Could not send a status to alert about the previous error!");
+            }
+        } catch (\Exception $e) {
+            CommandUtils::writeError($io, "Could not answer the demand!", $e);
+        }
     }
 
 }
