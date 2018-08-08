@@ -41,31 +41,6 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/auteurs/", name="authors")
-     */
-    function authorsAction() {
-        $authors = $this->getDoctrine()->getRepository(Author::class)->findAll();
-        return $this->render('main/authors.html.twig', [
-            'authors' => $authors
-        ]);
-    }
-
-    /**
-     * @Route("/auteurs/{username}", name="author-profile")
-     */
-    function authorAction(string $username) {
-        $author = $this->getDoctrine()->getRepository(Author::class)->findOneByUsername($username);
-
-        if($author == null) {
-            throw $this->createNotFoundException("Author not found");
-        }
-
-        return $this->render('main/author.html.twig', [
-            'author' => $author
-        ]);
-    }
-
-    /**
      * @Route("/inscription", name="subscribe")
      */
     function subscriptionAction() {

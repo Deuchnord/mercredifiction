@@ -7,7 +7,7 @@
         <ul class="authors-list">
             {% for author in authors %}
                 <li class="author">
-                    <a href="{{ path('author-profile', {username: author.username}) }}" title="{{ author.displayName }}">
+                    <a href="{{ path('authors_profile', {username: author.username}) }}" title="{{ author.displayName }}">
                         <img src="{{ author.avatar }}" alt="{{ author.displayName }}" class="avatar" />
                         <span class="detail">
                             <strong class="name">{{ author.displayName }}</strong>
