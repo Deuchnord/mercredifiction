@@ -38,6 +38,58 @@ class BotCommand extends ContainerAwareCommand {
         $this->updateAuthors($em, $io);
     }
 
+    /**
+     * @param ObjectManager $entityManager
+     * @param SymfonyStyle $io
+     */
+    private function processCommands(ObjectManager $entityManager, SymfonyStyle $io): void {
+        try {
+            $lastMentionId = $entityManager->getRepository(Cache::class)->getValue('LAST_MENTION_ID');
+
+            if ($lastMentionId === null) {
+                $lastMentionId = new Cache();
+                $lastMentionId
+                    ->setId('LAST_MENTION_ID')
+                    ->setValue(-1);
+            }
+
+            $mentions = MastodonUtils::getLastMentions($lastMentionId->getValue());
+
+            foreach ($mentions as $mention) {
+                // If in dev mode, ignore the DM from any person who is not the ADMIN defined in the .env
+                if (getenv('APP_ENV') == 'dev' &&
+                    strtolower($mention->getAuthor()->getUsername()) != strtolower(getenv('ADMIN'))) {
+                    break;
+                }
+
+                if (stripos($mention->getContent(), '#nocommand')) {
+                    break;
+                }
+
+                if(preg_match("#d[ée]sinscri[ts][ -]moi#i", $mention->getContent()) ||
+                    preg_match("#supprimes? mon compte#i", $mention->getContent())) {
+                    /** Delete account command */
+                    $this->deleteProfile($io, $mention);
+                }
+                elseif(preg_match('#inscri[ts][ -]moi#i', $mention->getContent())) {
+                    /** Create account command */
+                    $this->subscribe($io, $mention);
+                } else {
+                    $this->sendManual($mention, $io);
+                }
+
+                if ($lastMentionId->getValue() < $mention->getIdMastodon()) {
+                    $lastMentionId->setValue($mention->getIdMastodon());
+                }
+            }
+
+            $entityManager->persist($lastMentionId);
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            CommandUtils::writeError($io, "Could not get the last mentions.", $e);
+        }
+    }
+
     private function getEntityManager(): ObjectManager {
         return $this->getContainer()->get('doctrine')->getManager();
     }
@@ -85,58 +137,6 @@ class BotCommand extends ContainerAwareCommand {
             } catch (\Exception $e) {
                 CommandUtils::writeError($io, "Error while sending an error message", $e);
             }
-        }
-    }
-
-    /**
-     * @param ObjectManager $entityManager
-     * @param SymfonyStyle $io
-     */
-    private function processCommands(ObjectManager $entityManager, SymfonyStyle $io): void {
-        try {
-            $lastMentionId = $entityManager->getRepository(Cache::class)->getValue('LAST_MENTION_ID');
-
-            if ($lastMentionId === null) {
-                $lastMentionId = new Cache();
-                $lastMentionId
-                    ->setId('LAST_MENTION_ID')
-                    ->setValue(-1);
-            }
-
-            $mentions = MastodonUtils::getLastMentions($lastMentionId->getValue());
-
-            foreach ($mentions as $mention) {
-                // If in dev mode, ignore the DM from any person who is not the ADMIN defined in the .env
-                if (getenv('APP_ENV') == 'dev' &&
-                    strtolower($mention->getAuthor()->getUsername()) != strtolower(getenv('ADMIN'))) {
-                    break;
-                }
-
-                if (stripos($mention->getContent(), '#nocommand')) {
-                    break;
-                }
-
-                if(preg_match("#d[ée]sinscri[ts][ -]moi#i", $mention->getContent()) ||
-                    preg_match("#supprimes? mon compte#i", $mention->getContent())) {
-                    /** Delete account command */
-                    $this->deleteProfile($io, $mention);
-                }
-                elseif (preg_match('#inscri[ts][ -]moi#i', $mention->getContent())) {
-                    /** Create account command */
-                    $this->subscribe($io, $mention);
-                } else {
-                    $this->sendManual($mention, $io);
-                }
-
-                if ($lastMentionId->getValue() < $mention->getIdMastodon()) {
-                    $lastMentionId->setValue($mention->getIdMastodon());
-                }
-            }
-
-            $entityManager->persist($lastMentionId);
-            $entityManager->flush();
-        } catch (\Exception $e) {
-            CommandUtils::writeError($io, "Could not get the last mentions.", $e);
         }
     }
 
