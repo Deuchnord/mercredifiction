@@ -9,7 +9,9 @@
 namespace App\Utils;
 
 use App\Entity\Author;
+use App\Entity\Media;
 use App\Entity\Status;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class MastodonUtils {
 
@@ -89,10 +91,12 @@ class MastodonUtils {
      * @param bool $isPost if true, the request will be made with the HTTP POST method instead of GET
      * @param array $body the content of the body of the request. Ignored if $isPost == false
      * @param string $bearer a token, if required by the distant URL
+     * @param string $file the path to the file to upload
      * @return array|false an associative array('header', 'body') that contains the header and the body of the response
      * @throws \Exception thrown if the request has failed
+     * @throws FileException thrown if an error occurs with the file
      */
-    private static function sendRequest(string $url, bool $isPost, array $body = [], string $bearer = null) {
+    private static function sendRequest(string $url, bool $isPost, array $body = [], string $bearer = null, string $file = null) {
         $request = curl_init($url);
 
         $header = [];
@@ -107,6 +111,11 @@ class MastodonUtils {
 
         if($isPost) {
             curl_setopt($request, CURLOPT_POST, 1);
+
+            if($file != null) {
+                $body['file'] = new \CURLFile($file);
+            }
+
             $postStr = http_build_query($body, '', '&');
             curl_setopt($request, CURLOPT_POSTFIELDS, $postStr);
         }
@@ -291,15 +300,32 @@ class MastodonUtils {
      * Sens a new status
      * @param string $message the message to send - the mention is automatically added at the beginning of the message
      * @param Status $inResponseTo the status you want to reply to, or null
-     * @param string $visibility one of the values accepted by the API (see the API_* constants)
+     * @param string $visibility one of the values accepted by the API (see the VISIBILITY_* constants)
+     * @param Media[] $medias if set, the medias to attach to the new status
      * @throws \Exception
+     * @see VISIBILITY_DIRECT (default value): the new status will only be visible by the bot's account and the mentionned accounts
+     * @see VISIBILITY_PRIVATE: the new status will only be visible by the accounts that follow the bot's account
+     * @see VISIBILITY_UNLISTED: the new status will be visible in all timelines, but will not be shown on the bot's profile
+     * @see VISIBILITY_PUBLIC: the new status will be visible in all timelines and on the bot's profile
      */
-    public static function sendStatus(string $message, Status $inResponseTo = null, string $visibility = self::VISIBILITY_DIRECT) {
+    public static function sendStatus(string $message, Status $inResponseTo = null, string $visibility = self::VISIBILITY_DIRECT, array $medias = []) {
+        $attachments = [];
+
+        foreach($medias as $media) {
+            $attachment = $media->getMastodonId();
+
+            $attachments[] = $attachment;
+        }
+
         $data = [
             'status' => '@' . $inResponseTo->getAuthor()->getUsername() . ' ' . $message,
             'in_reply_to_id' => $inResponseTo->getIdMastodon(),
             'visibility' => $visibility
         ];
+
+        if(empty($attachments)) {
+            $data['media_ids'] = $attachments;
+        }
 
         self::sendRequest(getenv('MASTODON_INSTANCE') . '/api/v1/statuses', true, $data, self::getToken());
     }
@@ -324,5 +350,46 @@ class MastodonUtils {
             ->setAvatar($auth->avatar);
 
         return $author;
+    }
+
+    /**
+     * Sends a media to the Mastodon instance.
+     * @param string $path the path to the file to upload
+     * @param string|null $description a small description of the media for accessibility (max. 420 characters)
+     * @param array $focalPoint an [x, y] indexed array representing where the media should be focused if it has an image
+     * @return Media
+     * @throws \Exception
+     */
+    public static function sendMedia(string $path, string $description = null, array $focalPoint = null): Media {
+        $token = self::getToken();
+        $file = base64_encode(file_get_contents($path));
+        $url = getenv('MASTODON_INSTANCE') . '/api/v1/media';
+        $body = [];
+
+        if($description != null) {
+            $body['description'] = $description;
+        }
+
+        if($focalPoint != null) {
+            $body['focus'] = $focalPoint[0] . ',' . $focalPoint[1];
+        }
+
+        $resp = self::sendRequest($url, true, $body, $token, $file);
+
+        dump($resp);
+
+        $json = json_decode($resp['body'], true);
+
+        dump($json);
+
+        $media = new Media();
+        $media->setMastodonId($json['id'])
+            ->setType($json['type'])
+            ->setUrl($json['url'])
+            ->setPreview($json['preview_url'])
+            ->setDescription($json['description'])
+            ->setMetadata(json_encode($json['meta']));
+
+        return $media;
     }
 }
