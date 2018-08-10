@@ -199,35 +199,45 @@ class BotCommand extends ContainerAwareCommand {
     private function hideFiction(SymfonyStyle $io, Status $mention, string $url) {
         $io->write("Hiding the status at $url...");
         $em = self::getEntityManager();
-        $status = $em->getRepository(Status::class)->findOneByUrl($url);
 
-        if($status == null) {
-            $io->writeln(" Not in the database, ignoring");
-            try {
-                MastodonUtils::sendStatus("Je n'ai pas retrouvé le message\nVérifie que l'URL est correcte et que le pouet associé est bien présent sur ta page de profil (" . $mention->getAuthor()->getProfileUrl() . ")", $mention);
-            } catch (\Exception $e) {
-                CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
-            }
-        } elseif($status->getAuthor()->getUsername() !== $mention->getAuthor()->getUsername() && $mention->getAuthor()->getUsername() !== getenv('ADMIN')) {
-            $io->writeln(" Does not belong to " . $mention->getAuthor()->getUsername() . ", ignoring");
-            try {
-                MastodonUtils::sendStatus("Bien essayé, mais ce pouet ne t'appartient pas 😉", $mention);
-            } catch (\Exception $e) {
-                CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
-            }
-        } else {
-            $status->setBlacklisted(true);
-            $em->persist($status);
-            $em->flush();
+        try {
+            $status = $em->getRepository(Status::class)->findOneByUrl($url);
 
-            $io->writeln(" Done!");
+            if ($status == null) {
+                $io->writeln(" Not in the database, ignoring");
+                try {
+                    MastodonUtils::sendStatus("Je n'ai pas retrouvé le message\nVérifie que l'URL est correcte et que le pouet associé est bien présent sur ta page de profil (" . $mention->getAuthor()->getProfileUrl() . ")", $mention);
+                } catch (\Exception $e) {
+                    CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
+                }
+            } elseif ($status->getAuthor()->getUsername() !== $mention->getAuthor()->getUsername() && $mention->getAuthor()->getUsername() !== getenv('ADMIN')) {
+                $io->writeln(" Does not belong to " . $mention->getAuthor()->getUsername() . ", ignoring");
+                try {
+                    MastodonUtils::sendStatus("Bien essayé, mais ce pouet ne t'appartient pas 😉", $mention);
+                } catch (\Exception $e) {
+                    CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
+                }
+            } else {
+                $status->setBlacklisted(true);
+                $em->persist($status);
+                $em->flush();
+
+                $io->writeln(" Done!");
+                try {
+                    MastodonUtils::sendStatus("Le pouet a bien été masqué, il ne sera plus visible sur le site.\n" .
+                        "Note que pour des raisons techniques (notamment pour permettre de le réafficher), je l'ai conservé dans" .
+                        " ma base de données. Si toutefois, tu souhaites qu'il soit définitivement supprimé, tu peux envoyé un" .
+                        " message à l'administrateur. Attention, cette action sera irréversible !", $mention);
+                } catch (\Exception $e) {
+                    CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
+                }
+            }
+        } catch (NonUniqueResultException $e) {
+            CommandUtils::writeError($io, "Could not hide status.", $e);
             try {
-                MastodonUtils::sendStatus("Le pouet a bien été masqué, il ne sera plus visible sur le site.\n" .
-                    "Note que pour des raisons techniques (notamment pour permettre de le réafficher), je l'ai conservé dans" .
-                    " ma base de données. Si toutefois, tu souhaites qu'il soit définitivement supprimé, tu peux envoyé un" .
-                    " message à l'administrateur. Attention, cette action sera irréversible !", $mention);
+                MastodonUtils::sendStatus("Aïe, je n'ai pas réussi à masquer le pouet 😱\n@" . getenv('ADMIN') . ", j'ai besoin de touuuaaaaaaaaa 😭", $mention);
             } catch (\Exception $e) {
-                CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
+                CommandUtils::writeError($io, "Could not signal problem via Mastodon.", $e);
             }
         }
     }
