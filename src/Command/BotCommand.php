@@ -217,6 +217,13 @@ class BotCommand extends ContainerAwareCommand {
                 } catch (\Exception $e) {
                     CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
                 }
+            } elseif($status->isBlacklisted()) {
+                $io->writeln(" Already hidden, ignoring.");
+                try {
+                    MastodonUtils::sendStatus("Hmmm, le pouet est déjà masqué sur le site... 🧐", $mention);
+                } catch (\Exception $e) {
+                    CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
+                }
             } else {
                 $status->setBlacklisted(true);
                 $em->persist($status);
