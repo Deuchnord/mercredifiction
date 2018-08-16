@@ -156,6 +156,37 @@ body
               font-size: 0.7em
               color: $discreet-text-color
               font-weight: lighter
+    > .bot-commands
+        > .command
+          border: 1px solid $color-primary-0
+          border-bottom-left-radius: 5px
+          border-bottom-right-radius: 5px
+          margin-bottom: 30px
+          > h2
+            background: $color-primary-0
+            color: $inverted-text-color
+            margin: 0
+            padding: 5px 10px
+            font-size: 1em
+          > .description
+            padding: 5px 10px
+            font-size: 0.8em
+            > p
+              margin: 0
+          > .aliases, .example
+            border-top: 1px solid $color-primary-1
+            font-size: 0.8em
+            > h3
+              background: $color-primary-1
+              color: $inverted-text-color
+              margin: 0
+              padding: 5px
+            > ul > li
+                margin: 0
+            > blockquote
+              padding: 5px 10px
+              color: $color-primary-3
+              font-size: 0.9em
 
   > .welcome
     background: $color-primary-0

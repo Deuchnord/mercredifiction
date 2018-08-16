@@ -54,17 +54,32 @@
                 </div>
                 <div class="example">
                     <h3>Exemple</h3>
-                    <blockquote>@{{ bot.username }} masque https://hostux.social/@Deuchnord/100197105379209153</blockquote>
+                    <blockquote>
+                        @{{ bot.username }} masque https://hostux.social/@Deuchnord/100197105379209153
+                    </blockquote>
                 </div>
             </div>
             <div class="command">
                 <h2>Mes données personnelles</h2>
-                <p>Lancer cette commande vous permet de faire valoir votre droit d'accès aux données qui vous concernent.
-                    Un fichier téléchargeable vous sera transmis avec l'intégralité de vos informations personnelles.</p>
+                <div class="description">
+                    <p>Cette commande vous permet de faire valoir votre droit d'accès aux données qui vous concernent,
+                        conformément  au Règlement général pour la protection des données personnelles (RGPD),
+                        quel que soit votre région de résidence (même si vous vivez hors de l'Union européenne).
+                        Un fichier téléchargeable vous sera transmis avec l'intégralité de vos informations personnelles.</p>
+                </div>
             </div>
             <div class="command">
                 <h2>#NoCommand</h2>
-                <p>Si ce hashtag est présent dans un message, celui-ci sera ignoré.</p>
+                <div class="description">
+                    <p>Si ce hashtag est présent dans un message, celui-ci sera ignoré.</p>
+                </div>
+                <div class="example">
+                    <h3>Exemple</h3>
+                    <blockquote>
+                        @{{ admin.username }} hey, je n'arrive pas à m'inscrire sur mercredifiction.io, @{{ bot.username }}
+                        ne répond pas à ma demande 😢 #NoCommand
+                    </blockquote>
+                </div>
             </div>
         </div>
     </section>

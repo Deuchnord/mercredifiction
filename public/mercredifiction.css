@@ -152,6 +152,36 @@ body {
               font-size: 0.7em;
               color: #aaaaaa;
               font-weight: lighter; }
+    body > .static-content > .bot-commands > .command {
+      border: 1px solid #308AD4;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      margin-bottom: 30px; }
+      body > .static-content > .bot-commands > .command > h2 {
+        background: #308AD4;
+        color: white;
+        margin: 0;
+        padding: 5px 10px;
+        font-size: 1em; }
+      body > .static-content > .bot-commands > .command > .description {
+        padding: 5px 10px;
+        font-size: 0.8em; }
+        body > .static-content > .bot-commands > .command > .description > p {
+          margin: 0; }
+      body > .static-content > .bot-commands > .command > .aliases, body > .static-content > .bot-commands > .command .example {
+        border-top: 1px solid #7EB8E8;
+        font-size: 0.8em; }
+        body > .static-content > .bot-commands > .command > .aliases > h3, body > .static-content > .bot-commands > .command .example > h3 {
+          background: #7EB8E8;
+          color: white;
+          margin: 0;
+          padding: 5px; }
+        body > .static-content > .bot-commands > .command > .aliases > ul > li, body > .static-content > .bot-commands > .command .example > ul > li {
+          margin: 0; }
+        body > .static-content > .bot-commands > .command > .aliases > blockquote, body > .static-content > .bot-commands > .command .example > blockquote {
+          padding: 5px 10px;
+          color: #0D74CA;
+          font-size: 0.9em; }
   body > .welcome {
     background: #308AD4;
     padding: 50px;

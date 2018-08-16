@@ -61,9 +61,13 @@ class DefaultController extends Controller {
     function botManualAction() {
         $bot = new Author();
         $bot->setUsername(getenv('BOT_ACCOUNT'));
+
+        $admin = new Author();
+        $admin->setUsername(getenv('ADMIN'));
         
         return $this->render('main/bot-manual.html.twig', [
-            'bot' => $bot
+            'bot' => $bot,
+            'admin' => $admin
         ]);
     }
 
