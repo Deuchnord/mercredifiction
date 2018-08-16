@@ -75,7 +75,9 @@ class BotCommand extends ContainerAwareCommand {
                     /** Create account command */
                     $this->subscribe($io, $mention);
                 } elseif(preg_match("#masquer?(.+)(https?:\/\/[a-z0-9.-]+\/@[a-z0-9_-]+\/[0-9]+)#i", $mention->getContent(), $matches)) {
-                    $this->hideFiction($io, $mention, $matches[2]);
+                    $this->changeStatusVisibility($io, $mention, $matches[2], false);
+                } elseif(preg_match("#((affiche)|(restaure)r?)(.+)(https?:\/\/[a-z0-9.-]+\/@[a-z0-9_-]+\/[0-9]+)#i", $mention->getContent(), $matches)) {
+                    $this->changeStatusVisibility($io, $mention, $matches[5], true);
                 } else {
                     $this->sendManual($mention, $io);
                 }
@@ -196,8 +198,8 @@ class BotCommand extends ContainerAwareCommand {
         }
     }
 
-    private function hideFiction(SymfonyStyle $io, Status $mention, string $url) {
-        $io->write("Hiding the status at $url...");
+    private function changeStatusVisibility(SymfonyStyle $io, Status $mention, string $url, bool $visible) {
+        $io->write(($visible ? 'Displaying' : 'Hiding') . " the status at $url...");
         $em = self::getEntityManager();
 
         try {
@@ -206,7 +208,7 @@ class BotCommand extends ContainerAwareCommand {
             if ($status == null) {
                 $io->writeln(" Not in the database, ignoring");
                 try {
-                    MastodonUtils::sendStatus("Je n'ai pas retrouvé le message\nVérifie que l'URL est correcte et que le pouet associé est bien présent sur ta page de profil (" . $mention->getAuthor()->getProfileUrl() . ")", $mention);
+                    MastodonUtils::sendStatus("Je n'ai pas retrouvé le message\nVérifie que l'URL est correcte et que le pouet associé est bien présent sur ta page de profil (" . getenv('SITE_URL') . '/' . $mention->getAuthor()->getUsername() . ")", $mention);
                 } catch (\Exception $e) {
                     CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
                 }
@@ -217,24 +219,28 @@ class BotCommand extends ContainerAwareCommand {
                 } catch (\Exception $e) {
                     CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
                 }
-            } elseif($status->isBlacklisted()) {
-                $io->writeln(" Already hidden, ignoring.");
+            } elseif($status->isBlacklisted() == !$visible) {
+                $io->writeln(" Already " . ($visible ? 'visible' : 'hidden') . ", ignoring.");
                 try {
-                    MastodonUtils::sendStatus("Hmmm, le pouet est déjà masqué sur le site... 🧐", $mention);
+                    MastodonUtils::sendStatus("Hmmm, le pouet est déjà " . ($visible ? 'visible' : 'masqué') . " sur le site... 🧐", $mention);
                 } catch (\Exception $e) {
                     CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
                 }
             } else {
-                $status->setBlacklisted(true);
+                $status->setBlacklisted(!$visible);
                 $em->persist($status);
                 $em->flush();
 
                 $io->writeln(" Done!");
                 try {
-                    MastodonUtils::sendStatus("Le pouet a bien été masqué, il ne sera plus visible sur le site.\n" .
-                        "Note que pour des raisons techniques (notamment pour permettre de le réafficher), je l'ai conservé dans" .
-                        " ma base de données. Si toutefois, tu souhaites qu'il soit définitivement supprimé, tu peux envoyé un" .
-                        " message à l'administrateur. Attention, cette action sera irréversible !", $mention);
+                    if(!$visible) {
+                        MastodonUtils::sendStatus("Le pouet a bien été masqué, il ne sera plus visible sur le site.\n" .
+                            "Note que pour des raisons techniques (notamment pour permettre de le réafficher), je l'ai conservé dans" .
+                            " ma base de données. Si toutefois, tu souhaites qu'il soit définitivement supprimé, tu peux envoyer un" .
+                            " message à l'administrateur. Attention, cette action sera irréversible !", $mention);
+                    } else {
+                        MastodonUtils::sendStatus("La fiction est maintenant visible sur ton profil ! 😎", $mention);
+                    }
                 } catch (\Exception $e) {
                     CommandUtils::writeError($io, "Could not send information to " . $mention->getAuthor()->getUsername(), $e);
                 }
