@@ -25,6 +25,7 @@ class StatusRepository extends ServiceEntityRepository
     public function findAllNotBlacklisted() {
         return $this->createQueryBuilder('s')
             ->andWhere('s.blacklisted = false')
+            ->orderBy('s.date', 'desc')
             ->getQuery()
             ->getResult();
     }
@@ -44,13 +45,15 @@ class StatusRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return int|null
+     * @return Status|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findMaxIdMastodon(): int {
-        return $this->createQueryBuilder('s')
-            ->select('s, MAX(s.idMastodon) as maxId')
+    public function findLastStatus(): ?Status {
+        $qb = $this->createQueryBuilder('s');
+        return $qb->select('s')
+            ->where('s.idMastodon = (SELECT MAX(s2.idMastodon) FROM App\Entity\Status s2)')
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
     }
 
 //    /**

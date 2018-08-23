@@ -47,6 +47,7 @@ class Author {
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Status", mappedBy="author", orphanRemoval=true)
+     * @ORM\OrderBy({"date" = "DESC"})
      */
     private $statuses;
 
@@ -161,5 +162,20 @@ class Author {
         $param = preg_split("#@#", $this->getUsername());
 
         return 'https://' . $param[1] . '/@' . $param[0];
+    }
+
+    /**
+     * @return Collection|Status[]
+     */
+    public function getWhitelistedStatuses(): Collection {
+        $statuses = new ArrayCollection();
+
+        foreach($this->statuses as $status) {
+            if(!$status->isBlacklisted()) {
+                $statuses->add($status);
+            }
+        }
+
+        return $statuses;
     }
 }
