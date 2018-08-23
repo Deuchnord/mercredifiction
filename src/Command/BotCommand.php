@@ -53,9 +53,12 @@ class BotCommand extends ContainerAwareCommand {
                     ->setValue(-1);
             }
 
-            $mentions = MastodonUtils::getLastMentions($lastMentionId->getValue());
+            $notifications = MastodonUtils::getLastMentions($lastMentionId->getValue());
 
-            foreach ($mentions as $mention) {
+            foreach ($notifications as $notification) {
+                $idNotification = $notification['idNotification'];
+                $mention = $notification['status'];
+
                 // If in dev mode, ignore the DM from any person who is not the ADMIN defined in the .env
                 if (getenv('APP_ENV') == 'dev' &&
                     strtolower($mention->getAuthor()->getUsername()) != strtolower(getenv('ADMIN'))) {
@@ -82,8 +85,8 @@ class BotCommand extends ContainerAwareCommand {
                     $this->sendManual($mention, $io);
                 }
 
-                if ($lastMentionId->getValue() < $mention->getIdMastodon()) {
-                    $lastMentionId->setValue($mention->getIdMastodon());
+                if ($lastMentionId->getValue() < $idNotification) {
+                    $lastMentionId->setValue($idNotification);
                 }
             }
 

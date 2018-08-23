@@ -14,9 +14,11 @@ use App\Entity\Status;
 use App\Utils\MastodonUtils;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Bridge\PhpUnit\TextUI\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class FetchLastStatusesCommand extends ContainerAwareCommand {
     public const COMMAND_NAME = "app:status:update";
@@ -28,60 +30,55 @@ class FetchLastStatusesCommand extends ContainerAwareCommand {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $mastodonInstance = getenv('MASTODON_INSTANCE');
-        $hashtag = getenv('HASHTAG');
+        $io = new SymfonyStyle($input, $output);
+        $em = $this->getEntityManager();
 
-        if(!$mastodonInstance || !$hashtag) {
-            $output->writeln([
-                "You are lacking some configuration variable in your .env file.",
-                "Please check you have the following environment variables and try again:",
-                "- MASTODON_INSTANCE (the Mastodon instance's URL whose API you will consume)",
-                "- HASHTAG (the hashtag you want to read, without hash)"
-            ]);
+        try {
+            $lastStatus = $em->getRepository(Status::class)->findLastStatus();
+            $authors = $em->getRepository(Author::class)->findAll();
 
+            if($lastStatus == null) {
+                $statuses = MastodonUtils::getLastStatuses($authors);
+            } else {
+                $statuses = MastodonUtils::getLastStatuses($authors, $lastStatus->getIdMastodon());
+            }
+
+            $io->writeln("Found " . count($statuses) . " new fictions");
+
+            $n = 0;
+
+            foreach($statuses as $status) {
+                $io->writeln($status->getAuthor()->getUsername() . ': ' . $status->getContent() . ' (' . $status->getUrl() . ')');
+
+                $author = $em->getRepository(Author::class)->findOneByUsername($status->getAuthor()->getUsername());
+
+                if($author != null) {
+                    $status->setAuthor($author);
+                }
+
+                $em->persist($status);
+                $n++;
+
+                if($n % 50 == 0) {
+                    // Flush every 50 statuses
+                    $em->flush();
+                }
+            }
+
+            if($n % 50 != 0) {
+                // Last flush
+                $em->flush();
+            }
+
+            $io->success("New fictions saved!");
+        } catch (NonUniqueResultException $e) {
+            CommandUtils::writeError($io, "Error while getting the lastId!", $e);
+            return;
+        } catch (\Exception $e) {
+            CommandUtils::writeError($io, "Could not get the last statuses!", $e);
             return;
         }
 
-        $em = $this->getEntityManager();
-
-        $authors = $em->getRepository(Author::class)->findAll();
-        $statuses = $em->getRepository(Status::class)->findAll();
-
-        $json = MastodonUtils::getLastStatuses($authors, $endId);
-
-        $data = json_decode($json, true);
-
-        foreach($data as $d) {
-            $author = null;
-            $status = null;
-
-            try {
-                $author = $em->getRepository(Author::class)->findOneByUsername($d['account']['acct']);
-                $status = $em->getRepository(Status::class)->findOneByUrl($d['url']);
-            } catch (NonUniqueResultException $e) {
-            }
-
-            if($status != null || $author == null) {
-                continue;
-            }
-
-            $output->writeln($d['account']['acct']);
-
-            $content = strip_tags($d['content']);
-            $content = str_ireplace('#mercredifiction', '', $content);
-
-            $status = new Status();
-            $status->setUrl($d['url'])
-                ->setIdMastodon($d['id'])
-                ->setAuthor($author)
-                ->setBlacklisted(false)
-                ->setDate(new \DateTime($d['created_at']))
-                ->setContent($content);
-
-            $em->persist($status);
-        }
-
-        $em->flush();
     }
 
     private function getEntityManager(): ObjectManager {

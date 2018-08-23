@@ -28,24 +28,32 @@ class MastodonUtils {
      */
     public static function getLastMentions(int $sinceId = -1) {
         $token = self::getToken();
-        $url = getenv('MASTODON_INSTANCE') . '/api/v1/notifications?exclude_types[]=follow&exclude_types[]=favourite&exclude_types[]=reblog&since_id=' . $sinceId;
+        $url = getenv('MASTODON_INSTANCE') . '/api/v1/notifications';
 
-        return self::getStatuses($url, -1, $token, null, null, true);
+        $options = [
+            'exclude_types' => ['follow', 'favourite', 'reblog']
+        ];
+
+        if($sinceId != -1) {
+            $options['since_id'] = $sinceId;
+        }
+
+        return self::fetchStatuses($url, $options, $token, null, null, true);
     }
 
     /**
      * Get the last statuses from the Home timeline
      * @param Author[] $authorizedAuthors the authors whose statuses can be retrieved
-     * @param int $endId the last status ID (excluded) to fetch. Usually the greatest status ID in the database.
+     * @param int $sinceId the last status ID (excluded) to fetch. Usually the greatest status ID in the database.
      * @return Status[]
      * @throws \Exception
      */
-    public static function getLastStatuses(array $authorizedAuthors, int $endId = -1) {
+    public static function getLastStatuses(array $authorizedAuthors, int $sinceId = -1) {
         $hashtag = '#' . getenv('HASHTAG');
         $token = self::getToken();
         $url = getenv('MASTODON_INSTANCE') . '/api/v1/timelines/home';
 
-        return self::getStatuses($url, $endId, $token, $hashtag, $authorizedAuthors);
+        return self::fetchStatuses($url, ['since_id' => $sinceId], $token, $hashtag, $authorizedAuthors);
     }
 
     /**
@@ -61,7 +69,7 @@ class MastodonUtils {
 
         $url = getenv('MASTODON_INSTANCE') . '/api/v1/accounts/' . $author->getIdMastodon() . '/statuses';
 
-        $statuses = self::getStatuses($url, -1, $token, $hashtag);
+        $statuses = self::fetchStatuses($url, [], $token, $hashtag);
 
         return $statuses;
     }
@@ -146,7 +154,7 @@ class MastodonUtils {
      */
     private static function isAuthorAuthorized(array $authorizedAuthors, int $authorId): bool {
         foreach($authorizedAuthors as $author) {
-            if($authorId == $author->getMastodonId()) {
+            if($authorId == $author->getIdMastodon()) {
                 return true;
             }
         }
@@ -164,6 +172,8 @@ class MastodonUtils {
         if($hashtag == null) {
             return false;
         }
+
+        $hashtag = str_replace('#', '', $hashtag);
 
         foreach($toot->tags as $tag) {
             if($tag->name == strtolower($hashtag)) {
@@ -191,92 +201,102 @@ class MastodonUtils {
     }
 
     /**
-     * Gets all the statuses from given URL
+     * Fetches the statuses at the given $url.
      * @param string $url the URL to call in order to get the statuses
-     * @param int $endId the maximum ID (excluded) of the statuses - ignored if negative
-     * @param string|null $token if defined, the authentication token to give to the API
-     * @param string|null $hashtag the hashtag to filter on
-     * @param array|null $authorizedAuthors the authors whose statuses can be returned by this method
-     * @param bool $isEncapsulated if true, consider that the array received by the $url does not contain statuses but objects that contains a field `status`
-     * @return Status[] the statuses returned by the $url
+     * @param array|null $getOptions the GET options to append to the URL - see Mastodon's API documentation for more details
+     * @param string|null $token the token to use in order to fetch the API
+     * @param string|null $hashtag a hashtag to filter on
+     * @param array|null $authorizedAuthors the authors to filter on
+     * @param bool $isEncapsulated if true, the statuses will be considered as encapsulated in objects that contain an ID and a status
+     * @return Status[]|array an array of status, or, if $isEncapsulated == true, a ["idNotification", "status"] array
      * @throws \Exception
      */
-    private static function getStatuses(string $url, int $endId = -1, string $token = null, string $hashtag = null, array $authorizedAuthors = null, $isEncapsulated = false) {
+    private static function fetchStatuses(string $url, array $getOptions = [], string $token = null, string $hashtag = null, array $authorizedAuthors = null, $isEncapsulated = false): array {
         $statuses = [];
-        $sinceId = $endId;
+        $urlToCall = $url;
+        $sep = '?';
 
-        $maxIdHttpParameterSeparator = (strstr($url, '?')) ? '&' : '?';
+        if($getOptions === null) {
+            $getOptions = [];
+        }
 
-        while (true) {
-            $urlToCall = $url . (($sinceId > 0) ? ($maxIdHttpParameterSeparator . 'max_id=' . $sinceId) : '');
-            $response = self::sendRequest($urlToCall, false, [], $token);
+        foreach($getOptions as $opt => $val) {
 
-            if ($response === false) {
-                throw new \Exception("An error occurred while retrieving the statuses");
-            }
+            if(!is_array($val)) {
+                $urlToCall .= $sep . $opt . '=' . urlencode($val);
+            } else {
+                foreach($val as $v) {
+                    $urlToCall .= $sep . $opt . '[]=' . urlencode($v);
 
-            $toots = json_decode($response['body']);
-
-            if(empty($toots)) {
-                break;
-            }
-
-            if($toots === null) {
-                throw new \Exception("Server responded NULL!");
-            }
-
-            if(isset($toots->error)) {
-                throw new \Exception($toots->error);
-            }
-
-            foreach ($toots as $t) {
-                $toot = $t;
-
-                if($isEncapsulated) {
-                    $toot = $t->status;
+                    if($sep == '?') {
+                        $sep = '&';
+                    }
                 }
+            }
 
-                if ($authorizedAuthors != null && !self::isAuthorAuthorized($authorizedAuthors, $toot->account->id) ||
-                        $hashtag != null && !self::hasHashtag($hashtag, $toot)) {
-                    // Ignore any toots from unauthorized authors or not having the $hashtag.
-                    $sinceId = $toot->id;
-                    continue;
-                }
+            if($sep == '?') {
+                $sep = '&';
+            }
+        }
 
+        $response = self::sendRequest($urlToCall, false, [], $token);
+        $toots = json_decode($response['body']);
+
+        if($toots == []) {
+            return [];
+        }
+
+        $maxId = -1;
+
+        foreach($toots as $toot) {
+            $idNotification = 0;
+
+            if($maxId == -1 || $toot->id < $maxId) {
+                $maxId = $toot->id;
+            }
+
+            if($isEncapsulated) {
+                $idNotification = $toot->id;
+                $toot = $toot->status;
+            }
+
+
+            if(($hashtag == null || self::hasHashtag($hashtag, $toot)) && ($authorizedAuthors == null || self::isAuthorAuthorized($authorizedAuthors, $toot->account->id))) {
+                // Clean the toot
                 $content = preg_replace("#<br ?/?>#", "\n", $toot->content);
                 $content = str_replace('</p><p>', "\n", $content);
                 $content = strip_tags($content);
 
                 $status = new Status();
+
+                $author = new Author();
+                $author->setUsername($toot->account->acct)
+                    ->setIdMastodon($toot->account->id)
+                    ->setAvatar($toot->account->avatar_static)
+                    ->setDisplayName($toot->account->display_name);
+
                 $status->setIdMastodon($toot->id)
+                    ->setAuthor($author)
                     ->setDate(new \DateTime($toot->created_at))
-                    ->setBlacklisted(false);
-
-                if($authorizedAuthors !== null) {
-                    $status->setAuthor(self::getAuthorByMastodonId($authorizedAuthors, $toot->account->id));
-                } else {
-                    $author = new Author();
-                    $author->setUsername($toot->account->acct)
-                        ->setIdMastodon($toot->account->id)
-                        ->setAvatar($toot->account->avatar_static)
-                        ->setDisplayName($toot->account->display_name);
-
-                    $status->setAuthor($author);
-                }
-
-                $status->setUrl($toot->url)
+                    ->setUrl($toot->url)
+                    ->setBlacklisted(false)
                     ->setContent($content);
 
                 if($isEncapsulated) {
-                    $status->setIdMastodon($t->id);
+                    $statuses[] = [
+                        'idNotification' => $idNotification,
+                        'status' => $status
+                    ];
+                } else {
+                    $statuses[] = $status;
                 }
-
-                $sinceId = $status->getIdMastodon();
-
-                $statuses[] = $status;
             }
         }
-        return $statuses;
+
+        $options = $getOptions;
+        $options['max_id'] = $maxId - 1;
+
+        return array_merge($statuses, self::fetchStatuses($url, $options, $token, $hashtag, $authorizedAuthors, $isEncapsulated));
     }
 
     private static function separateHeaders($str) {
@@ -376,11 +396,7 @@ class MastodonUtils {
 
         $resp = self::sendRequest($url, true, $body, $token, $file);
 
-        dump($resp);
-
         $json = json_decode($resp['body'], true);
-
-        dump($json);
 
         $media = new Media();
         $media->setMastodonId($json['id'])
