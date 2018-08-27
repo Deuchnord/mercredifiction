@@ -408,4 +408,33 @@ class MastodonUtils {
 
         return $media;
     }
+
+    /**
+     * Follows the given account on Mastodon.
+     * This is mandatory in order to make the getLastStatuses() work correctly, as this method uses the Home timeline to
+     * get the known authors' statuses.
+     * @param Author $author the account to follow
+     * @throws \Exception
+     */
+    public static function follow(Author $author) {
+        $url = getenv('MASTODON_INSTANCE') . '/api/v1/accounts/' . $author->getIdMastodon() . '/follow';
+        $body = [
+            'reblogs' => false // Tell Mastodon to not show the account's reblogs in the timeline
+        ];
+        $token = self::getToken();
+
+        self::sendRequest($url, true, $body, $token);
+    }
+
+    /**
+     * Unfollows the given account on Mastodon.
+     * @param Author $author
+     * @throws \Exception
+     */
+    public static function unfollow(Author $author) {
+        $url = getenv('MASTODON_INSTANCE') . '/api/v1/accounts/' . $author->getIdMastodon() . '/unfollow';
+        $token = self::getToken();
+
+        self::sendRequest($url, true, [], $token);
+    }
 }

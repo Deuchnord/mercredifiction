@@ -130,6 +130,7 @@ class BotCommand extends ContainerAwareCommand {
             }
 
             $em->persist($author);
+            MastodonUtils::follow($author);
             $io->writeln(" Done!");
 
             try {
@@ -185,6 +186,7 @@ class BotCommand extends ContainerAwareCommand {
 
             $entityManager->remove($author);
             $entityManager->flush();
+            MastodonUtils::unfollow($author);
             $io->writeln(" Done!");
 
             // TODO: add Adibou's GIF, with a focus on 300,130
