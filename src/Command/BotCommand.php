@@ -74,8 +74,7 @@ class BotCommand extends ContainerAwareCommand {
                     preg_match('#supprimes? mon compte#i', $mention->getContent())) {
                     /** Delete account command */
                     $this->deleteProfile($io, $mention);
-                }
-                elseif(preg_match('#inscri[ts][ -]moi#i', $mention->getContent())) {
+                } elseif(preg_match('#inscri[ts][ -]moi#i', $mention->getContent())) {
                     /** Create account command */
                     $this->subscribe($io, $mention);
                 } elseif(preg_match("#masquer?(.+)(https?:\/\/[a-z0-9.-]+\/@[a-z0-9_-]+\/[0-9]+)#i", $mention->getContent(), $matches)) {
