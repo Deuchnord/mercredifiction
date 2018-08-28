@@ -5,6 +5,7 @@
         <title>{% block title %}#MercrediFiction{% endblock %}</title>
         <link rel="stylesheet" href="{{ asset("mercredifiction.css") }}" />
         <link rel="icon" type="images/png" href="{{ asset("icon.png") }}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </head>
     <body>
         <header>
@@ -12,8 +13,8 @@
                 <img src="{{ asset("mercredifiction.png") }}" alt="MercrediFiction" />
             </a>
             <div class="links">
-                <a href="{{ path('authors_home') }}"><i class="icofont icofont-people"></i> Liste des auteurs</a>
-                <a href="{{ path('subscribe') }}"><i class="icofont icofont-ui-user"></i> Inscription</a>
+                <a href="{{ path('authors_home') }}"><i class="icofont icofont-people">Liste des auteurs</i></a>
+                <a href="{{ path('subscribe') }}"><i class="icofont icofont-ui-user">Inscription</i></a>
             </div>
         </header>
         {% block body %}{% endblock %}

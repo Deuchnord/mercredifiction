@@ -1,0 +1,5 @@
+@media (max-width: 1050px) {
+  .static-content {
+    width: calc(100% - 50px); } }
+
+/*# sourceMappingURL=mobile.css.map */

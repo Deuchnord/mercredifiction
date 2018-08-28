@@ -1,0 +1,246 @@
+@charset "utf-8"
+
+@import "colors"
+@import "font-families"
+
+$main-text-color: #555555
+$grey-background: #eeeeee
+$discreet-text-color: #aaaaaa
+$inverted-text-color: white
+
+@import "reset.css"
+@import "icofont/css/icofont.css"
+
+html
+  position: relative
+  min-height: 100%
+
+body
+  font-family: "Montserrat", sans-serif
+  font-size: 20px
+  margin-bottom: 50px
+  color: $main-text-color
+
+  .toots
+    width: 900px
+    margin: auto
+    > .toot
+      padding: 20px 0
+      > .content
+        font-family: "Libre Baskerville", serif
+        text-align: justify
+        font-size: 16px
+      > .attribution
+        text-align: right
+        font-size: 16px
+        color: $discreet-text-color
+        > a
+          color: $discreet-text-color
+        &:before
+          content: "– "
+
+  > header
+    background: white
+    margin: 0
+    padding: 2px
+    > .logo
+      display: inline-block
+      text-decoration: none
+      vertical-align: middle
+      padding: 10px 20px
+      > img
+        height: 128px
+    > .links
+      position: absolute
+      right: 50px
+      top: 60px
+      > a
+        padding: 0 10px
+        text-decoration: none
+        transition: 500ms
+        border-bottom: 1px solid $inverted-text-color
+        &:hover
+          border-bottom: 1px solid $discreet-text-color
+        > .icofont
+          font-family: "Montserrat", sans-serif !important
+          &::before
+            font-family: icofont
+            margin-right: 10px
+
+  h1, h2, h3, h4, h5, h6
+    vertical-align: middle
+    color: $color-primary-0
+    font-weight: bold
+    margin: 15px 0
+
+  h1
+    font-size: 50px
+
+  h2
+    font-size: 30px
+
+  p, li
+    line-height: 25px
+    margin: 0 20px
+
+  ul
+    margin: 10px 50px
+    > li
+      list-style-type: square
+
+  a
+    color: #3088d4
+
+  > footer
+    position: absolute
+    bottom: 10px
+    width: 100%
+    text-align: center
+    color: $discreet-text-color
+    font-size: 0.7em
+    > a
+      color: $discreet-text-color
+
+  > .static-content
+    width: 1000px
+    margin: 20px auto
+    p
+      margin: 15px 0
+    > .center
+      text-align: center
+    > .right
+      text-align: right
+    > .small
+      font-size: 0.4em
+    > .big
+      font-size: 2em
+      line-height: 1.2em
+      margin-top: 20px
+    em
+      color: $color-primary-0
+      font-weight: bold
+    > .authors-list
+      text-align: center
+      > .author
+        list-style-type: none
+        display: inline-block
+        margin: 0
+        > a
+          display: block
+          text-align: left
+          height: 70px
+          width: 300px
+          text-decoration: none
+          background: $grey-background
+          padding: 10px 30px
+          margin: 10px
+          box-shadow: 0 0 0 $discreet-text-color
+          transition: 500ms box-shadow, 500ms transform
+          &:hover
+            box-shadow: 0 0 20px $discreet-text-color
+            transform: scale(1.05)
+          > img
+            max-height: 64px
+            display: inline-block
+            margin-right: 10px
+            vertical-align: top
+          > .detail
+            display: inline-block
+            color: $main-text-color
+            > .name
+              font-weight: bold
+              display: block
+              width: 220px
+              margin-top: 5px
+              margin-bottom: 0px
+              padding: 0
+              overflow: hidden
+              text-overflow: ellipsis
+              white-space: nowrap
+            > .remark
+              font-size: 0.7em
+              color: $discreet-text-color
+              font-weight: lighter
+    > .bot-commands
+        > .command
+          border: 1px solid $color-primary-0
+          border-bottom-left-radius: 5px
+          border-bottom-right-radius: 5px
+          margin-bottom: 30px
+          > h2
+            background: $color-primary-0
+            color: $inverted-text-color
+            margin: 0
+            padding: 5px 10px
+            font-size: 1em
+          > .description
+            padding: 5px 10px
+            font-size: 0.8em
+            > p
+              margin: 0
+          > .aliases, .example
+            border-top: 1px solid $color-primary-1
+            font-size: 0.8em
+            > h3
+              background: $color-primary-1
+              color: $inverted-text-color
+              margin: 0
+              padding: 5px
+            > ul > li
+                margin: 0
+            > blockquote
+              padding: 5px 10px
+              color: $color-primary-3
+              font-size: 0.9em
+
+  > .welcome
+    background: $color-primary-0
+    padding: 50px
+    text-align: center
+    font-size: 30px
+    color: $inverted-text-color
+    > p
+      margin: 0
+      &.moreinfo
+        margin-top: 20px
+        > a
+          font-size: 20px
+          color: white
+
+  > .profile
+    width: 100%
+    > .author
+      background: $color-primary-0
+      padding: 50px 0
+      > .inner
+        width: 750px
+        margin: auto
+        > .avatar
+          border-radius: 50%
+          transition: 250ms
+          height: 200px
+          vertical-align: middle
+          &:hover
+            border-radius: 25%
+        > .display-name
+          display: inline-block
+          margin-left: 15px
+          vertical-align: middle
+          font-weight: bold
+          font-size: 40px
+          color: $inverted-text-color
+          text-overflow: ellipsis
+          max-width: 499px
+          overflow: hidden
+          > .username
+            display: block
+            font-size: 20px
+            color: $inverted-text-color
+            margin-left: 20px
+            margin-top: 20px
+    > .warning.profile-incomplete
+      font-style: italic
+      font-size: 0.9em
+      color: $discreet-text-color
+      text-align: center
+      margin: 50px -50px

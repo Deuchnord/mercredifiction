@@ -15,7 +15,7 @@
                                 {% if author.state < 2 %}
                                     Profil en cours de création
                                 {% elseif author.statuses.count > 0 %}
-                                    {{ author.statuses.count }} fiction{% if author.statuses.count > 1 %}s{% endif %}
+                                    {{ author.whitelistedStatuses.count }} fiction{% if author.whitelistedStatuses.count > 1 %}s{% endif %}
                                 {% else %}
                                     Aucune fiction
                                 {% endif %}
