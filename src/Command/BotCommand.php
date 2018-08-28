@@ -69,7 +69,6 @@ class BotCommand extends ContainerAwareCommand {
                     break;
                 }
 
-                dump($mention->getContent());
                 if(preg_match('#d[ée]sinscri[ts][ -]moi#iu', $mention->getContent()) ||
                     preg_match('#supprimes? mon compte#i', $mention->getContent())) {
                     /** Delete account command */
