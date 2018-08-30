@@ -101,6 +101,7 @@ body {
     width: 1000px;
     margin: 20px auto; }
     body > .static-content p {
+      text-align: justify;
       margin: 15px 0; }
     body > .static-content > .center {
       text-align: center; }
