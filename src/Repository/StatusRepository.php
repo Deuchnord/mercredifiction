@@ -56,6 +56,20 @@ class StatusRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @param \DateTime $beginInterval
+     * @param \DateTime $endInterval
+     * @return Status[]
+     */
+    public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval): array {
+        return $this->createQueryBuilder('s')
+            ->where('s.date BETWEEN :begin AND :end')
+            ->setParameter('begin', $beginInterval->format('Y-m-d H:i:s'))
+            ->setParameter('end', $endInterval->format('Y-m-d H:i:s'))
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Status[] Returns an array of Status objects
 //     */
