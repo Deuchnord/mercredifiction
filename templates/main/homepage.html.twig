@@ -12,7 +12,7 @@
                 <div class="content">
                     <p>{{ toot.content | nl2br }}</p>
                 </div>
-                <p class="attribution"><a href="{{ path('authors_profile', {username: toot.author.username}) }}">{{ toot.author.displayName }}</a>, le <a href="{{ toot.url }}">{{ toot.date | localizeddate('long', 'short') }}</a></p>
+                <p class="attribution"><a href="{{ path('authors_profile', {username: toot.author.username}) }}">{{ toot.author.displayName }}</a>, le <a href="{{ toot.url }}" target="_blank">{{ toot.date | localizeddate('long', 'short') }}</a></p>
             </div>
         {% endfor %}
     </section>
