@@ -188,7 +188,6 @@ class BotCommand extends ContainerAwareCommand {
             MastodonUtils::unfollow($author);
             $io->writeln(" Done!");
 
-            // TODO: add Adibou's GIF, with a focus on 300,130
             MastodonUtils::sendStatus("J'ai bien supprimé ton profil. À bientôt ! 👋", $mention, MastodonUtils::VISIBILITY_DIRECT);
         } catch (NonUniqueResultException $e) {
             CommandUtils::writeError($io, "Could not delete " . $mention->getAuthor()->getUsername() . "'s profile: more than one authors found!'");
