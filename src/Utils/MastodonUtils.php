@@ -84,13 +84,7 @@ class MastodonUtils {
             return $devToken;
         }
 
-        $appId = getenv('APP_ID');
-        $appSecret = getenv('APP_SECRET');
-        $url = getenv('MASTODON_INSTANCE') . '/oauth/token';
-        $json = MastodonUtils::sendRequest($url, true, ['client_id' => $appId, 'client_secret' => $appSecret]);
-        $data = json_decode($json, true);
-
-        return $data['access_token'];
+        throw new \Exception("Please provide a token in the .env file!");
     }
 
     /**
