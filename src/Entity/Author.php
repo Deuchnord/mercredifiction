@@ -31,7 +31,7 @@ class Author {
 
     /**
      * The author username. It has usually the form "username@instance.tld", for instance "Gargron@mastodon.social".
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=191)
      */
     private $username;
 
@@ -41,7 +41,7 @@ class Author {
     private $displayName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=191, nullable=true)
      */
     private $avatar;
 
