@@ -66,7 +66,7 @@ class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand {
                 $em->persist($author);
                 $em->flush();
             } catch (\Exception $e) {
-                CommandUtils::writeError($io, "Could not get " . $author->getUsername() . "'s statuses'");
+                CommandUtils::writeError($io, "Could not get " . $author->getUsername() . "'s statuses'", $e);
                 try {
                     MastodonUtils::sendStatus("@" . getenv('ADMIN') . " An error occurred while fetching a new author's statuses");
                 } catch (\Exception $e) {
