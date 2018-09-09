@@ -3,7 +3,7 @@
 [![Is the website up?](https://img.shields.io/website-up-down-green-red/https/mercredifiction.io.svg?label=mercredifiction.io)](https://mercredifiction.io)
 
 [![A Mastodon-related project!](https://img.shields.io/badge/-Mastodon-grey.svg?logo=mastodon)](https://joinmastodon.org)
-[![PHP 7.1](https://img.shields.io/badge/PHP-7.1-purple.svg?logo=php)](https://php.net)
+[![PHP 7.2](https://img.shields.io/badge/PHP-7.2-purple.svg?logo=php)](https://php.net)
 [![Symfony 4.1](https://img.shields.io/badge/Symfony-4.1-black.svg?logo=symfony)](https://symfony.com)
 [![Licenced under the GNU Affero General Public license](https://img.shields.io/badge/license-AGPL_v3-blue.svg)](LICENSE)
 
