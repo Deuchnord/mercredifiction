@@ -16,6 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends Controller {
 
+    /** @var int */
+    const GET_FICTIONS_MAX_NB_LOOPS = 100;
+
+    /** @var int */
+    private $nbLoops;
+
+    public function __construct() {
+        $this->nbLoops = 0;
+    }
+
     /**
      * @Route("/", name="homepage")
      * @throws \Exception
@@ -40,14 +50,14 @@ class DefaultController extends Controller {
         if($beginInterval == null) {
             $beginInterval = new \DateTime('last tuesday noon');
         }
-        dump($beginInterval->format('Y-m-d H:i:s'));
         $endInterval = clone $beginInterval;
         $endInterval->add(new \DateInterval('P2D'))
             ->sub(new \DateInterval('PT1S'));
 
         $fictions = $this->getDoctrine()->getRepository(Status::class)->findByInterval($beginInterval, $endInterval);
 
-        if($andBefore && empty($fictions)) {
+        if($andBefore && empty($fictions) && $this->nbLoops < self::GET_FICTIONS_MAX_NB_LOOPS) {
+            $this->nbLoops++;
             return $this->getFictions($beginInterval->sub(new \DateInterval('P1W')));
         }
 
