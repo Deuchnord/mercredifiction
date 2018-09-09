@@ -28,7 +28,7 @@ class Status
     private $author;
 
     /**
-     * @ORM\Column(type="string", length=191)
+     * @ORM\Column(type="string", length=255)
      */
     private $url;
 

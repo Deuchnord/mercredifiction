@@ -11,27 +11,27 @@ class Cache
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(type="string")
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=191)
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $value;
-
-    public function setId(string $id): self
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     public function getId()
     {
         return $this->id;
     }
 
-    public function getValue(): ?string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -39,6 +39,18 @@ class Cache
     public function setValue(string $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName($name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
