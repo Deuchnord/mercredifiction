@@ -235,6 +235,10 @@ class MastodonUtils {
         $response = self::sendRequest($urlToCall, false, [], $token);
         $toots = json_decode($response['body']);
 
+        if(isset($toots->error)) {
+            throw new \Exception($toots->error);
+        }
+
         if($toots == []) {
             return [];
         }
