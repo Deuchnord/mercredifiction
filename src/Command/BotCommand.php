@@ -49,7 +49,7 @@ class BotCommand extends ContainerAwareCommand {
             if ($lastMentionId === null) {
                 $lastMentionId = new Cache();
                 $lastMentionId
-                    ->setId('LAST_MENTION_ID')
+                    ->setName('LAST_MENTION_ID')
                     ->setValue(-1);
             }
 
@@ -62,11 +62,11 @@ class BotCommand extends ContainerAwareCommand {
                 // If in dev mode, ignore the DM from any person who is not the ADMIN defined in the .env
                 if (getenv('APP_ENV') == 'dev' &&
                     strtolower($mention->getAuthor()->getUsername()) != strtolower(getenv('ADMIN'))) {
-                    break;
+                    continue;
                 }
 
                 if (stripos($mention->getContent(), '#nocommand')) {
-                    break;
+                    continue;
                 }
 
                 if(preg_match('#d[ée]sinscri[ts][ -]moi#iu', $mention->getContent()) ||
