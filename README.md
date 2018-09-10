@@ -39,4 +39,5 @@ specification. Contributions of any kind are welcome!
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 - [Jérôme Deuchnord](https://deuchnord.fr) [💬](#questions "Answering questions") [💻](https://github.com/Deuchnord/mercredifiction/commits?author=Deuchnord "Writes code") [🎨](#design "Logo, design of the website") [👀](#reviewer "Reviews pull requests") [🤔](#planning "Planning")
+- [Brigitte lareinedeselfes](https://framapiaf.org/@lareinedeselfes) [🐛](#bugs "Bug reporter")
 <!-- ALL-CONTRIBUTORS-LIST:END -->
