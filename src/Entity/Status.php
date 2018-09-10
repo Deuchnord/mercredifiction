@@ -17,7 +17,7 @@ class Status
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      */
     private $idMastodon;
 
@@ -112,12 +112,12 @@ class Status
         return $this;
     }
 
-    public function getIdMastodon(): ?int
+    public function getIdMastodon(): ?string
     {
         return $this->idMastodon;
     }
 
-    public function setIdMastodon(int $idMastodon): self
+    public function setIdMastodon(string $idMastodon): self
     {
         $this->idMastodon = $idMastodon;
 
