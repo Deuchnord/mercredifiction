@@ -17,7 +17,7 @@ class Status
     private $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="bigint")
      */
     private $idMastodon;
 
