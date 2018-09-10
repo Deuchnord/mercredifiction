@@ -26,3 +26,5 @@ yarn-error.log
 /var/app.db
 
 .DS_Store
+
+/src/Migrations
