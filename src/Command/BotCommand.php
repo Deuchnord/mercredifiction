@@ -130,7 +130,13 @@ class BotCommand extends ContainerAwareCommand {
             }
 
             $em->persist($author);
-            MastodonUtils::follow($author);
+
+            try {
+                MastodonUtils::follow($author);
+            } catch (\Exception $e) {
+                CommandUtils::writeError($io, "Could not follow " . $author->getUsername(), $e);
+            }
+
             $io->writeln(" Done!");
 
             try {
