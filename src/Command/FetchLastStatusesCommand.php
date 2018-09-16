@@ -35,6 +35,7 @@ class FetchLastStatusesCommand extends ContainerAwareCommand {
 
         try {
             $lastStatus = $em->getRepository(Status::class)->findLastStatus();
+            dump($lastStatus);
             $authors = $em->getRepository(Author::class)->findAll();
 
             if($lastStatus == null) {
