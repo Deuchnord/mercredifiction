@@ -57,6 +57,7 @@ class BotCommand extends ContainerAwareCommand {
 
             foreach ($notifications as $notification) {
                 $idNotification = $notification['idNotification'];
+                /** @var Status $mention */
                 $mention = $notification['status'];
 
                 // If in dev mode, ignore the DM from any person who is not the ADMIN defined in the .env
