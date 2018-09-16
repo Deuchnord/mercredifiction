@@ -178,22 +178,6 @@ class MastodonUtils {
     }
 
     /**
-     * Fetches the author with given $mastodonId from $authorizedAuthors
-     * @param Author[] $authorizedAuthors
-     * @param int $mastodonId
-     * @return Author|null
-     */
-    private static function getAuthorByMastodonId(array $authorizedAuthors, int $mastodonId) {
-        foreach($authorizedAuthors as $author) {
-            if($author->getIdMastodon() == $mastodonId) {
-                return $author;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Fetches the statuses at the given $url.
      * @param string $url the URL to call in order to get the statuses
      * @param array|null $getOptions the GET options to append to the URL - see Mastodon's API documentation for more details
@@ -260,7 +244,7 @@ class MastodonUtils {
 
             if(($hashtag == null || self::hasHashtag($hashtag, $toot)) && ($authorizedAuthors == null || self::isAuthorAuthorized($authorizedAuthors, $toot->account->id))) {
                 // Clean the toot
-                $content = preg_replace("#<br ?/?>#", "\n", $toot->content);
+                $content = preg_replace("#<br[ ]?/?>#", "\n", $toot->content);
                 $content = str_replace('</p><p>', "\n", $content);
                 $content = strip_tags($content);
 
