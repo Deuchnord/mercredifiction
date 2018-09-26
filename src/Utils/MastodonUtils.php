@@ -58,17 +58,23 @@ class MastodonUtils {
     /**
      * Get the author's statuses that contain the hashtag given in the .env file
      * @param Author $author the author for which the statuses are wanted
+     * @param Status $startFromStatus if set, start from that status
      * @return Status[] an array of statuses
      * @throws \Exception
-     * @return Status[]
      */
-    public static function getAuthorStatuses(Author $author) {
+    public static function getAuthorStatuses(Author $author, Status $startFromStatus = null) {
         $hashtag = getenv('HASHTAG');
         $token = self::getToken();
 
         $url = getenv('MASTODON_INSTANCE') . '/api/v1/accounts/' . $author->getIdMastodon() . '/statuses';
 
-        $statuses = self::fetchStatuses($url, [], $token, $hashtag);
+        $getOptions = [];
+
+        if($startFromStatus != null) {
+            $getOptions['since_id'] = $startFromStatus->getIdMastodon();
+        }
+
+        $statuses = self::fetchStatuses($url, $getOptions, $token, $hashtag);
 
         return $statuses;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Author;
 use App\Entity\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -45,14 +46,21 @@ class StatusRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param Author|null $author if set, just the given author's last status
      * @return Status|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findLastStatus(): ?Status {
+    public function findLastStatus(Author $author = null): ?Status {
         $qb = $this->createQueryBuilder('s');
-        return $qb->select('s')
-            ->where('s.idMastodon = (SELECT MAX(s2.idMastodon) FROM App\Entity\Status s2)')
-            ->getQuery()
+        $query = $qb->select('s')
+            ->where('s.idMastodon = (SELECT MAX(s2.idMastodon) FROM App\Entity\Status s2)');
+
+        if($author != null) {
+            $query = $query->where('s.author = :author')
+                ->setParameter('author', $author->getId());
+        }
+
+        return $query->getQuery()
             ->getOneOrNullResult();
     }
 
