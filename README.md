@@ -24,6 +24,30 @@ fictions. Plus, the more time passes, the more the oldest fictions become inacce
 The goal of this project is to make it easier to read all the fictions of an author by enhancing
 their presentation on a website that makes them more visible.
 
+## Installation
+
+_Note: it is strongly recommended to use Linux (I mean a real one, not a Windows Linux subsystem) or macOS for this._
+
+Installing the project is as easy as any Symfony project. First, install PHP (≥ 7.2), [Composer](https://getcomposer.org/download) and MySQL or MariaDB. Then:
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Deuchnord/mercredifiction.git
+   ```
+2. Install the components:
+   ```sh
+   php /path/to/composer.phar install
+   ```
+   NB: if Composer complains about the `APP_ENV` environment variable not defined, just `export APP_ENV="dev"`, then clear the cache with `php bin/console console:cache`.
+3. Create an empty database on your RDBMS
+4. Complete `DATABASE_URL` variable in your `.env` file (line 23) to reflect your configuration. _This file is personal and must not be pushed to the Git repository._
+5. Install the database:
+   ```sh
+   php bin/console doctrine:schema:create
+   ```
+
+That's it, now you have a fresh install! Even if it is usable _as it_, it does not contain anything for now. Feel free to add manually some data in the database!
+
 ## How to contribute
 
 There are different ways to contribute to this project:
