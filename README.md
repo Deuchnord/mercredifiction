@@ -1,6 +1,6 @@
 # ![#MercrediFiction](public/mercredifiction.png)
 
-[![Is the website up?](https://img.shields.io/website-up-down-green-red/https/mercredifiction.io.svg?label=mercredifiction.io)](https://mercredifiction.io)
+[![Is the website up?](https://img.shields.io/website-up-down-green-red/https/mercredifiction.io.svg?label=mercredifiction.io)](https://mercredifiction.io) [![Build Status](https://travis-ci.org/Deuchnord/mercredifiction.svg?branch=master)](https://travis-ci.org/Deuchnord/mercredifiction)
 
 [![A Mastodon-related project!](https://img.shields.io/badge/-Mastodon-grey.svg?logo=mastodon)](https://joinmastodon.org)
 [![PHP 7.2](https://img.shields.io/badge/PHP-7.2-purple.svg?logo=php)](https://php.net)
