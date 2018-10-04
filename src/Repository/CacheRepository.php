@@ -19,7 +19,8 @@ class CacheRepository extends ServiceEntityRepository
         parent::__construct($registry, Cache::class);
     }
 
-    public function getValue(string $name) {
+    public function getValue(string $name)
+    {
         return $this->createQueryBuilder('c')
             ->andWhere('c.name = :name')
             ->setParameter('name', $name)
@@ -42,7 +43,7 @@ class CacheRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+     */
 
     /*
     public function findOneBySomeField($value): ?Cache
@@ -54,5 +55,5 @@ class CacheRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+     */
 }
