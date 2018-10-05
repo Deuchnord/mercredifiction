@@ -50,11 +50,19 @@ That's it, now you have a fresh install! Even if it is usable _as it_, it does n
 
 ## How to contribute
 
-There are different ways to contribute to this project:
+There are plenty of ways to contribute to this project:
 
 - Help developing new functions, fixing bugs...
 - Report bugs
 - Or in any other way you find!
+
+If you decide to contribute to the code, think to ensure that your code meets the coding standards by simply invoking the following command:
+
+```sh
+php /path/to/composer.phar run-script php-cs-fixer
+```
+
+This will modify the files so that they meet [the coding recommandations](https://symfony.com/doc/current/contributing/code/standards.html) for a Symfony application. If the coding standard are not met, your pull request will fail at the continuous-integration testing and your branch will not be mergeable.
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors/blob/master/README.md)
 specification. Contributions of any kind are welcome!
