@@ -8,9 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * An author is a user of Mastodon who has subscribed to the website in order to make their statuses appear on the website.
+ *
  * @ORM\Entity(repositoryClass="App\Repository\AuthorRepository")
  */
-class Author {
+class Author
+{
     public const STATE_NEW = 0;
     public const STATE_IMPORTING_STATUSES = 1;
     public const STATE_OK = 2;
@@ -18,6 +20,7 @@ class Author {
     /**
      * An unique identifier to distinguish each author from another. This identifier is proper to the website
      * and does not reflect the identifier on their instance.
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -31,6 +34,7 @@ class Author {
 
     /**
      * The author username. It has usually the form "username@instance.tld", for instance "Gargron@mastodon.social".
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $username;
@@ -158,20 +162,22 @@ class Author {
         return $this;
     }
 
-    public function getProfileUrl(): string {
-        $param = preg_split("#@#", $this->getUsername());
+    public function getProfileUrl(): string
+    {
+        $param = preg_split('#@#', $this->getUsername());
 
-        return 'https://' . $param[1] . '/@' . $param[0];
+        return 'https://'.$param[1].'/@'.$param[0];
     }
 
     /**
      * @return Collection|Status[]
      */
-    public function getWhitelistedStatuses(): Collection {
+    public function getWhitelistedStatuses(): Collection
+    {
         $statuses = new ArrayCollection();
 
-        foreach($this->statuses as $status) {
-            if(!$status->isBlacklisted()) {
+        foreach ($this->statuses as $status) {
+            if (!$status->isBlacklisted()) {
                 $statuses->add($status);
             }
         }

@@ -23,7 +23,8 @@ class StatusRepository extends ServiceEntityRepository
     /**
      * @return Status[]
      */
-    public function findAllNotBlacklisted() {
+    public function findAllNotBlacklisted()
+    {
         return $this->createQueryBuilder('s')
             ->andWhere('s.blacklisted = false')
             ->orderBy('s.date', 'desc')
@@ -33,7 +34,9 @@ class StatusRepository extends ServiceEntityRepository
 
     /**
      * @param $url
+     *
      * @return Status|null
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByUrl($url): ?Status
@@ -48,6 +51,7 @@ class StatusRepository extends ServiceEntityRepository
     /**
      * @param Author|null $author if set, just the given author's last status
      * @return Status|null
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findLastStatus(Author $author = null): ?Status {
@@ -67,9 +71,11 @@ class StatusRepository extends ServiceEntityRepository
     /**
      * @param \DateTime $beginInterval
      * @param \DateTime $endInterval
+     *
      * @return Status[]
      */
-    public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval): array {
+    public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval): array
+    {
         return $this->createQueryBuilder('s')
             ->where('s.date BETWEEN :begin AND :end')
             ->setParameter('begin', $beginInterval->format('Y-m-d H:i:s'))
@@ -93,7 +99,7 @@ class StatusRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+     */
 
     /*
     public function findOneBySomeField($value): ?Status
@@ -105,5 +111,5 @@ class StatusRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+     */
 }

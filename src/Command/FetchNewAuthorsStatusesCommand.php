@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: jerome
  * Date: 02/07/2018
- * Time: 13:13
+ * Time: 13:13.
  */
 
 namespace App\Command;
@@ -17,20 +17,24 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand {
-    public const COMMAND_NAME = "app:authors:new:get-statuses";
+class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand
+{
+    public const COMMAND_NAME = 'app:authors:new:get-statuses';
     public const COMMAND_DESCRIPTION = "Fetches the new authors' statuses";
 
-    protected function configure() {
+    protected function configure()
+    {
         $this->setName(self::COMMAND_NAME)
             ->setDescription(self::COMMAND_DESCRIPTION);
     }
 
-    private function getEntityManager(): ObjectManager {
+    private function getEntityManager(): ObjectManager
+    {
         return $this->getContainer()->get('doctrine')->getManager();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $io = new SymfonyStyle($input, $output);
 
         $em = $this->getEntityManager();
@@ -38,7 +42,7 @@ class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand {
         $authors = $em->getRepository(Author::class)->findByState(Author::STATE_NEW);
 
         foreach ($authors as $author) {
-            $io->write("Fetching " . $author->getUsername() . "'s statuses... ");
+            $io->write('Fetching '.$author->getUsername()."'s statuses... ");
             $author->setState(Author::STATE_IMPORTING_STATUSES);
             $em->persist($author);
             $em->flush();
@@ -51,19 +55,19 @@ class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand {
 
                 $i = 1;
 
-                foreach($statuses as $status) {
+                foreach ($statuses as $status) {
                     $status->setAuthor($author);
                     $em->persist($status);
 
-                    if($i % 10 == 0) {
+                    if (0 == $i % 10) {
                         // Flush the statuses every 10 statuses persisted
                         $em->flush();
                     }
 
-                    $i++;
+                    ++$i;
                 }
 
-                $io->writeln("Done");
+                $io->writeln('Done');
 
                 $author->setState(Author::STATE_OK);
                 $em->persist($author);
@@ -82,12 +86,11 @@ class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand {
                 $io->writeln("A new attempt will be made at next execution for " . $author->getUsername() . ".");
 
                 try {
-                    MastodonUtils::sendStatus("@" . getenv('ADMIN') . " An error occurred while fetching a new author's statuses");
+                    MastodonUtils::sendStatus('@'.getenv('ADMIN')." An error occurred while fetching a new author's statuses");
                 } catch (\Exception $e) {
-                    CommandUtils::writeError($io, "Could not send error message to " . getenv('ADMIN'), $e);
+                    CommandUtils::writeError($io, 'Could not send error message to '.getenv('ADMIN'), $e);
                 }
             }
         }
     }
-
 }
