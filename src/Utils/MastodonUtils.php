@@ -66,22 +66,27 @@ class MastodonUtils
     /**
      * Get the author's statuses that contain the hashtag given in the .env file.
      *
-     * @param Author $author the author for which the statuses are wanted
+     * @param Author $author          the author for which the statuses are wanted
+     * @param Status $startFromStatus if set, start from that status
      *
      * @return Status[] an array of statuses
      *
      * @throws \Exception
-     *
-     * @return Status[]
      */
-    public static function getAuthorStatuses(Author $author)
+    public static function getAuthorStatuses(Author $author, Status $startFromStatus = null)
     {
         $hashtag = getenv('HASHTAG');
         $token = self::getToken();
 
         $url = getenv('MASTODON_INSTANCE').'/api/v1/accounts/'.$author->getIdMastodon().'/statuses';
 
-        $statuses = self::fetchStatuses($url, [], $token, $hashtag);
+        $getOptions = [];
+
+        if (null != $startFromStatus) {
+            $getOptions['since_id'] = $startFromStatus->getIdMastodon();
+        }
+
+        $statuses = self::fetchStatuses($url, $getOptions, $token, $hashtag);
 
         return $statuses;
     }
@@ -204,25 +209,6 @@ class MastodonUtils
     }
 
     /**
-     * Fetches the author with given $mastodonId from $authorizedAuthors.
-     *
-     * @param Author[] $authorizedAuthors
-     * @param int      $mastodonId
-     *
-     * @return Author|null
-     */
-    private static function getAuthorByMastodonId(array $authorizedAuthors, int $mastodonId)
-    {
-        foreach ($authorizedAuthors as $author) {
-            if ($author->getIdMastodon() == $mastodonId) {
-                return $author;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Fetches the statuses at the given $url.
      *
      * @param string      $url               the URL to call in order to get the statuses
@@ -291,7 +277,7 @@ class MastodonUtils
 
             if ((null == $hashtag || self::hasHashtag($hashtag, $toot)) && (null == $authorizedAuthors || self::isAuthorAuthorized($authorizedAuthors, $toot->account->id))) {
                 // Clean the toot
-                $content = preg_replace('#<br ?/?>#', "\n", $toot->content);
+                $content = preg_replace('#<br[ ]?/?>#', "\n", $toot->content);
                 $content = str_replace('</p><p>', "\n", $content);
                 $content = strip_tags($content);
 

@@ -60,6 +60,7 @@ class BotCommand extends ContainerAwareCommand
 
             foreach ($notifications as $notification) {
                 $idNotification = $notification['idNotification'];
+                /** @var Status $mention */
                 $mention = $notification['status'];
 
                 // If in dev mode, ignore the DM from any person who is not the ADMIN defined in the .env
@@ -137,7 +138,13 @@ class BotCommand extends ContainerAwareCommand
             }
 
             $em->persist($author);
-            MastodonUtils::follow($author);
+
+            try {
+                MastodonUtils::follow($author);
+            } catch (\Exception $e) {
+                CommandUtils::writeError($io, 'Could not follow '.$author->getUsername(), $e);
+            }
+
             $io->writeln(' Done!');
 
             try {

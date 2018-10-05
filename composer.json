@@ -5,6 +5,7 @@
         "php": "^7.2",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-curl": "*",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "^4.1",
         "symfony/console": "^4.1",
