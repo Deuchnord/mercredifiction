@@ -142,10 +142,10 @@ class BotCommand extends ContainerAwareCommand
             try {
                 MastodonUtils::follow($author);
             } catch (\Exception $e) {
-                CommandUtils::writeError($io, "Could not follow " . $author->getUsername(), $e);
+                CommandUtils::writeError($io, 'Could not follow '.$author->getUsername(), $e);
             }
 
-            $io->writeln(" Done!");
+            $io->writeln(' Done!');
 
             try {
                 MastodonUtils::sendStatus("Salut, ton inscription a bien été prise en compte ! 😄\n\nTon profil se trouve juste ici : ".$url."\nIl risque d'être un peu vide dans un premier temps, mais ne t'inquiète pas, je m'occupe de tout ! 😉", $mention);

@@ -51,7 +51,7 @@ class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand
                 $lastStatus = $em->getRepository(Status::class)->findLastStatus($author);
 
                 $statuses = MastodonUtils::getAuthorStatuses($author, $lastStatus);
-                $io->write(count($statuses) . " statuses to save... ");
+                $io->write(count($statuses).' statuses to save... ');
 
                 $i = 1;
 
@@ -73,7 +73,7 @@ class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand
                 $em->persist($author);
                 $em->flush();
             } catch (\Exception $e) {
-                CommandUtils::writeError($io, "Could not get " . $author->getUsername() . "'s statuses'", $e);
+                CommandUtils::writeError($io, 'Could not get '.$author->getUsername()."'s statuses'", $e);
 
                 $io->write("Reverting the author's state... ");
                 $author->setState(Author::STATE_NEW);
@@ -81,9 +81,9 @@ class FetchNewAuthorsStatusesCommand extends ContainerAwareCommand
 
                 $em->flush();
 
-                $io->writeln("Done.");
+                $io->writeln('Done.');
 
-                $io->writeln("A new attempt will be made at next execution for " . $author->getUsername() . ".");
+                $io->writeln('A new attempt will be made at next execution for '.$author->getUsername().'.');
 
                 try {
                     MastodonUtils::sendStatus('@'.getenv('ADMIN')." An error occurred while fetching a new author's statuses");

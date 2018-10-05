@@ -50,16 +50,18 @@ class StatusRepository extends ServiceEntityRepository
 
     /**
      * @param Author|null $author if set, just the given author's last status
+     *
      * @return Status|null
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findLastStatus(Author $author = null): ?Status {
+    public function findLastStatus(Author $author = null): ?Status
+    {
         $qb = $this->createQueryBuilder('s');
         $query = $qb->select('s')
             ->where('s.idMastodon = (SELECT MAX(s2.idMastodon) FROM App\Entity\Status s2)');
 
-        if($author != null) {
+        if (null != $author) {
             $query = $query->where('s.author = :author')
                 ->setParameter('author', $author->getId());
         }

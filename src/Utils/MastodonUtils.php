@@ -66,13 +66,15 @@ class MastodonUtils
     /**
      * Get the author's statuses that contain the hashtag given in the .env file.
      *
-     * @param Author $author the author for which the statuses are wanted
+     * @param Author $author          the author for which the statuses are wanted
      * @param Status $startFromStatus if set, start from that status
+     *
      * @return Status[] an array of statuses
      *
      * @throws \Exception
      */
-    public static function getAuthorStatuses(Author $author, Status $startFromStatus = null) {
+    public static function getAuthorStatuses(Author $author, Status $startFromStatus = null)
+    {
         $hashtag = getenv('HASHTAG');
         $token = self::getToken();
 
@@ -80,7 +82,7 @@ class MastodonUtils
 
         $getOptions = [];
 
-        if($startFromStatus != null) {
+        if (null != $startFromStatus) {
             $getOptions['since_id'] = $startFromStatus->getIdMastodon();
         }
 
@@ -275,7 +277,7 @@ class MastodonUtils
 
             if ((null == $hashtag || self::hasHashtag($hashtag, $toot)) && (null == $authorizedAuthors || self::isAuthorAuthorized($authorizedAuthors, $toot->account->id))) {
                 // Clean the toot
-                $content = preg_replace("#<br[ ]?/?>#", "\n", $toot->content);
+                $content = preg_replace('#<br[ ]?/?>#', "\n", $toot->content);
                 $content = str_replace('</p><p>', "\n", $content);
                 $content = strip_tags($content);
 
