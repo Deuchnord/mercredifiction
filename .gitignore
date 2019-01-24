@@ -28,3 +28,7 @@ yarn-error.log
 .DS_Store
 
 /src/Migrations
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+###< friendsofphp/php-cs-fixer ###

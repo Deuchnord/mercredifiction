@@ -21,10 +21,13 @@ class AuthorRepository extends ServiceEntityRepository
 
     /**
      * @param $username
+     *
      * @return Author|null
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsername(string $username): ?Author {
+    public function findOneByUsername(string $username): ?Author
+    {
         return $this->createQueryBuilder('a')
             ->andWhere('a.username = :username')
             ->setParameter('username', $username)
@@ -34,9 +37,11 @@ class AuthorRepository extends ServiceEntityRepository
 
     /**
      * @param int $state
+     *
      * @return Author[]
      */
-    public function findByState(int $state): array {
+    public function findByState(int $state): array
+    {
         return $this->createQueryBuilder('a')
             ->andWhere('a.state = :state')
             ->setParameter('state', $state)
@@ -59,7 +64,7 @@ class AuthorRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+     */
 
     /*
     public function findOneBySomeField($value): ?Author
@@ -71,5 +76,5 @@ class AuthorRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+     */
 }

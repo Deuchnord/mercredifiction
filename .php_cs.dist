@@ -1,0 +1,21 @@
+<?php
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+	'blank_line_after_namespace' => true,
+	'combine_consecutive_issets' => true,
+	'elseif' => true,
+	'encoding' => true,
+	'indentation_type' => true,
+	'blank_line_before_statement' => [
+		'statements' => ['continue', 'declare', 'die', 'do', 'exit', 'for', 'foreach', 'goto', 'if', 'include', 'include_once', 'require', 'require_once', 'return', 'switch', 'throw', 'try', 'while', 'yield']
+	],
+	'braces' => [
+		'allow_single_line_closure' => true,
+	],
+	'class_attributes_separation' => ['elements' => ['method']],
+	'align_multiline_comment' => ['comment_type' => 'all_multiline'],
+        'array_syntax' => ['syntax' => 'short'],
+    ])
+;

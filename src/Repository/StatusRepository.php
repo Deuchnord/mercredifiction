@@ -22,7 +22,8 @@ class StatusRepository extends ServiceEntityRepository
     /**
      * @return Status[]
      */
-    public function findAllNotBlacklisted() {
+    public function findAllNotBlacklisted()
+    {
         return $this->createQueryBuilder('s')
             ->andWhere('s.blacklisted = false')
             ->orderBy('s.date', 'desc')
@@ -41,13 +42,21 @@ class StatusRepository extends ServiceEntityRepository
 
     public function findLastStatus(): ?Status {
         $qb = $this->createQueryBuilder('s');
+
         return $qb->select('s')
             ->where('s.idMastodon = (SELECT MAX(s2.idMastodon) FROM App\Entity\Status s2)')
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval, bool $getBlacklisted = false): array {
+    /**
+     * @param \DateTime $beginInterval
+     * @param \DateTime $endInterval
+     *
+     * @return Status[]
+     */
+    public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval, bool $getBlacklisted = false): array
+    {
         return $this->createQueryBuilder('s')
             ->where('s.date BETWEEN :begin AND :end AND s.blacklisted = :blacklisted')
             ->setParameter('begin', $beginInterval->format('Y-m-d H:i:s'))

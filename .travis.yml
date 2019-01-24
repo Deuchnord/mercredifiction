@@ -1,0 +1,13 @@
+language: php
+php:
+        - 7.2
+
+sudo: false
+services: mysql
+
+install:
+        - composer install --prefer-dist --no-progress --no-suggest --ansi
+
+script:
+        # First, look for PHP standard errors
+        - vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no src assets config public templates tests translations
