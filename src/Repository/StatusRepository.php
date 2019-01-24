@@ -30,11 +30,6 @@ class StatusRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @param $url
-     * @return Status|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
     public function findOneByUrl($url): ?Status
     {
         return $this->createQueryBuilder('s')
@@ -44,10 +39,6 @@ class StatusRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    /**
-     * @return Status|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
     public function findLastStatus(): ?Status {
         $qb = $this->createQueryBuilder('s');
         return $qb->select('s')
@@ -56,11 +47,6 @@ class StatusRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    /**
-     * @param \DateTime $beginInterval
-     * @param \DateTime $endInterval
-     * @return Status[]
-     */
     public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval, bool $getBlacklisted = false): array {
         return $this->createQueryBuilder('s')
             ->where('s.date BETWEEN :begin AND :end AND s.blacklisted = :blacklisted')
@@ -70,33 +56,4 @@ class StatusRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-//    /**
-//     * @return Status[] Returns an array of Status objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Status
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
