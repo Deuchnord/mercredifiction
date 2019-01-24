@@ -40,7 +40,8 @@ class StatusRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findLastStatus(): ?Status {
+    public function findLastStatus(): ?Status
+    {
         $qb = $this->createQueryBuilder('s');
 
         return $qb->select('s')
