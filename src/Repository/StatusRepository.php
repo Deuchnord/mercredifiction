@@ -31,13 +31,6 @@ class StatusRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @param $url
-     *
-     * @return Status|null
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
     public function findOneByUrl($url): ?Status
     {
         return $this->createQueryBuilder('s')
@@ -47,11 +40,6 @@ class StatusRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    /**
-     * @return Status|null
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
     public function findLastStatus(): ?Status
     {
         $qb = $this->createQueryBuilder('s');
@@ -68,42 +56,14 @@ class StatusRepository extends ServiceEntityRepository
      *
      * @return Status[]
      */
-    public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval): array
+    public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval, bool $getBlacklisted = false): array
     {
         return $this->createQueryBuilder('s')
-            ->where('s.date BETWEEN :begin AND :end')
+            ->where('s.date BETWEEN :begin AND :end AND s.blacklisted = :blacklisted')
             ->setParameter('begin', $beginInterval->format('Y-m-d H:i:s'))
             ->setParameter('end', $endInterval->format('Y-m-d H:i:s'))
+            ->setParameter('blacklisted', $getBlacklisted)
             ->getQuery()
             ->getResult();
     }
-
-//    /**
-//     * @return Status[] Returns an array of Status objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-     */
-
-    /*
-    public function findOneBySomeField($value): ?Status
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-     */
 }
