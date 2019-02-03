@@ -37,6 +37,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Update the issues template for Github
 - Add error pages (#12)
 
+### Changed
+
+- Update Symfony to 4.2 (#14)
+
+### Removed
+
+- Remove unused dependencies (#14)
+
 ### Fixed
 
 - Fix homepage hidden toots (#13)

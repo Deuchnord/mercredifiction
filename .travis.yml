@@ -10,4 +10,4 @@ install:
 
 script:
         # First, look for PHP standard errors
-        - vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no src assets config public templates tests translations
+        - vendor/bin/php-cs-fixer fix --diff --config=.php_cs.dist -v --dry-run --using-cache=no src assets config public templates tests
