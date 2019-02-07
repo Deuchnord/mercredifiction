@@ -59,7 +59,8 @@ class StatusRepository extends ServiceEntityRepository
     public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval, bool $getBlacklisted = false): array
     {
         return $this->createQueryBuilder('s')
-            ->where('s.date BETWEEN :begin AND :end AND s.blacklisted = :blacklisted')
+            ->where('s.date BETWEEN :begin AND :end')
+            ->andWhere('s.blacklisted = :blacklisted')
             ->setParameter('begin', $beginInterval->format('Y-m-d H:i:s'))
             ->setParameter('end', $endInterval->format('Y-m-d H:i:s'))
             ->setParameter('blacklisted', $getBlacklisted)
