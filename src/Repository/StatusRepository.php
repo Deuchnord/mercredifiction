@@ -62,6 +62,7 @@ class StatusRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->where('s.date BETWEEN :begin AND :end')
             ->andWhere('s.blacklisted = :blacklisted')
+            ->orderBy('s.date', 'ASC')
             ->setParameter('begin', $beginInterval->format('Y-m-d H:i:s'))
             ->setParameter('end', $endInterval->format('Y-m-d H:i:s'))
             ->setParameter('blacklisted', $getBlacklisted)
