@@ -53,6 +53,7 @@ class StatusRepository extends ServiceEntityRepository
     /**
      * @param \DateTime $beginInterval
      * @param \DateTime $endInterval
+     * @param bool      $getBlacklisted
      *
      * @return Status[]
      */
