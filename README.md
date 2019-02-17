@@ -24,6 +24,10 @@ fictions. Plus, the more time passes, the more the oldest fictions become inacce
 The goal of this project is to make it easier to read all the fictions of an author by enhancing
 their presentation on a website that makes them more visible.
 
+## Join the community!
+
+- **On Matrix:** [`#mercredifiction:matrix.deuchnord.fr`](https://matrix.to/#/#mercredifiction:matrix.deuchnord.fr)
+
 ## Installation
 
 _Note: it is strongly recommended to use Linux (I mean a real one, not a Windows Linux subsystem) or macOS for this._
