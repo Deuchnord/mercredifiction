@@ -40,10 +40,6 @@ class BotCommand extends ContainerAwareCommand
         $this->updateAuthors($em, $io);
     }
 
-    /**
-     * @param ObjectManager $entityManager
-     * @param SymfonyStyle  $io
-     */
     private function processCommands(ObjectManager $entityManager, SymfonyStyle $io): void
     {
         try {

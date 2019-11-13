@@ -207,7 +207,6 @@ class MastodonUtils
      * Fetches the author with given $mastodonId from $authorizedAuthors.
      *
      * @param Author[] $authorizedAuthors
-     * @param int      $mastodonId
      *
      * @return Author|null
      */
@@ -373,10 +372,6 @@ class MastodonUtils
     /**
      * Fetches the author in.
      *
-     * @param int $idMastodon
-     *
-     * @return Author
-     *
      * @throws \Exception
      */
     public static function getAuthor(int $idMastodon): Author
@@ -418,8 +413,6 @@ class MastodonUtils
 
     /**
      * Unfollows the given account on Mastodon.
-     *
-     * @param Author $author
      *
      * @throws \Exception
      */

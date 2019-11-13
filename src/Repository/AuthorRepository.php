@@ -22,8 +22,6 @@ class AuthorRepository extends ServiceEntityRepository
     /**
      * @param $username
      *
-     * @return Author|null
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByUsername(string $username): ?Author
@@ -36,8 +34,6 @@ class AuthorRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $state
-     *
      * @return Author[]
      */
     public function findByState(int $state): array

@@ -51,9 +51,6 @@ class StatusRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param \DateTime $beginInterval
-     * @param \DateTime $endInterval
-     *
      * @return Status[]
      */
     public function findByInterval(\DateTime $beginInterval, \DateTime $endInterval, bool $getBlacklisted = false): array
