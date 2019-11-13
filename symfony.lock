@@ -242,6 +242,9 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/mime": {
+        "version": "v4.3.7"
+    },
     "symfony/monolog-bridge": {
         "version": "v4.1.0"
     },
@@ -277,6 +280,9 @@
     },
     "symfony/polyfill-intl-icu": {
         "version": "v1.8.0"
+    },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.12.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.8.0"
@@ -337,6 +343,15 @@
     },
     "symfony/test-pack": {
         "version": "v1.0.2"
+    },
+    "symfony/translation": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "2ad9d2545bce8ca1a863e50e92141f0b9d87ffcd"
+        }
     },
     "symfony/twig-bridge": {
         "version": "v4.1.0"
